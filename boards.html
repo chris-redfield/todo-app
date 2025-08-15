@@ -1,491 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kanban Boards Dashboard</title>
+    <link rel="stylesheet" href="/todo-app/localBorde.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .user-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px 15px;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: background 0.2s;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .user-section:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-            border: 2px solid rgba(255, 255, 255, 0.4);
-        }
-
-        .user-info h2 {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 300;
-        }
-
-        .user-info p {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-        }
-
-        .logo {
-            color: white;
-            font-size: 2rem;
-            font-weight: 300;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .boards-section {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            margin-top: -15px; /* Pull up to align better with workspace section */
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .action-button {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            padding: 12px 16px; /* Slightly larger padding to match workspace card height */
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            height: 44px; /* Fixed height to match workspace card */
-        }
-
-        .action-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .section-title {
-            color: white;
-            font-size: 1.3rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .boards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .board-card {
-            border-radius: 12px;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .board-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        .board-card.create-new {
-            border: 2px dashed rgba(255, 255, 255, 0.4);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 160px;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .board-card.create-new:hover {
-            border-color: rgba(255, 255, 255, 0.6);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .create-icon {
-            font-size: 3rem;
-            color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 10px;
-        }
-
-        .create-text {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        .board-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-        }
-
-        .board-title {
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            line-height: 1.3;
-        }
-
-        .board-description {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-            line-height: 1.4;
-            margin-bottom: 15px;
-            min-height: 40px;
-        }
-
-        .board-stats {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-
-        .stat {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.8rem;
-        }
-
-        .board-date {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.8rem;
-        }
-
-        .board-actions {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .board-card:hover .board-actions {
-            opacity: 1;
-        }
-
-        .action-btn {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            padding: 5px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-left: 5px;
-            transition: background 0.2s;
-            font-size: 0.8rem;
-        }
-
-        .action-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .action-btn.delete:hover {
-            background: rgba(255, 71, 87, 0.8);
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 10% auto;
-            padding: 30px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            min-height: fit-content;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .close {
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 1;
-        }
-
-        .close:hover {
-            color: #000;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: #555;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-family: inherit;
-            font-size: 0.9rem;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 20px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-        }
-
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #5a6fd8;
-        }
-
-        .btn-secondary {
-            background: #e0e0e0;
-            color: #333;
-        }
-
-        .btn-secondary:hover {
-            background: #d0d0d0;
-        }
-
-        .btn-danger {
-            background: #ff4757;
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #ff3838;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .empty-state h3 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            font-weight: 300;
-        }
-
-        .empty-state p {
-            font-size: 1rem;
-            margin-bottom: 20px;
-        }
-
-        /* Color Picker Styles */
-        .color-picker-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .color-option {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            cursor: pointer;
-            border: 3px solid transparent;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .color-option:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-
-        .color-option.selected {
-            border-color: #333;
-            transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
-        }
-
-        .color-option.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                gap: 20px;
-                text-align: center;
-            }
-            
-            .boards-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
-            .section-header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-            
-            .header-actions {
-                flex-direction: column;
-                width: 100%;
-            }
-            
-            .action-button {
-                justify-content: center;
-            }
-
-            .color-picker-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            /* Mobile modal improvements */
-            .modal-content {
-                margin: 5% auto;
-                margin-bottom: 20px;
-                width: 95%;
-                padding: 20px;
-            }
-
-            .modal-actions {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                margin-bottom: 5px;
-            }
-        }
     </style>
 </head>
+
 <body>
     <div class="header">
         <div class="logo">Kanban Boards</div>
         <div class="user-section" onclick="openWorkspaceSettings()">
-            <div class="user-avatar">U</div>
+            <div class="user-avatar"><i class="fa-solid fa-gear"></i>
+
+            </div>
             <div class="user-info">
                 <h2 id="workspaceName">My workspace</h2>
                 <p>Local boards</p>
@@ -496,7 +31,7 @@
     <div class="boards-section">
         <div class="section-header">
             <h2 class="section-title">
-                <span>👥</span>
+                <span><i class="fa-regular fa-note-sticky"></i></span>
                 Your boards
             </h2>
         </div>
@@ -531,7 +66,8 @@
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="deleteBoardBtn" onclick="deleteBoardFromModal()" style="display: none;">Delete Board</button>
+                    <button type="button" class="btn btn-danger" id="deleteBoardBtn" onclick="deleteBoardFromModal()"
+                        style="display: none;">Delete Board</button>
                     <button type="submit" class="btn btn-primary" id="saveBoardBtn">Create Board</button>
                 </div>
             </form>
@@ -560,10 +96,12 @@
                     <label>Workspace Management</label>
                     <div style="display: flex; gap: 10px; margin-top: 10px;">
                         <button type="button" class="btn btn-secondary" onclick="exportBoards()" style="flex: 1;">
-                            📥 Export Boards
+                            <i class="fa-solid fa-download"></i>
+  Export Boards
                         </button>
                         <button type="button" class="btn btn-secondary" onclick="triggerImport()" style="flex: 1;">
-                            📤 Import Boards
+                            <i class="fa-solid fa-download"></i>
+ Import Boards
                         </button>
                     </div>
                 </div>
@@ -601,7 +139,7 @@
                 name: 'My workspace',
                 backgroundColor: colorThemes[0].gradient
             };
-            
+
             document.getElementById('workspaceName').textContent = workspaceSettings.name;
             document.body.style.background = workspaceSettings.backgroundColor;
             selectedWorkspaceColor = workspaceSettings.backgroundColor;
@@ -658,7 +196,7 @@
         function createBoardCardHTML(board) {
             const stats = getBoardStats(board.id);
             const backgroundColor = board.backgroundColor || 'rgba(255, 255, 255, 0.15)';
-            
+
             return `
                 <div class="board-card" onclick="openBoard('${board.id}')" style="background: ${backgroundColor}">
                     <div class="board-actions">
@@ -673,11 +211,12 @@
                     <div class="board-description">${board.description || 'No description provided'}</div>
                     <div class="board-stats">
                         <div class="stat">
-                            <span>📋</span>
+                            <span><i class="fa-regular fa-clipboard"></i>
+</span>
                             <span>${stats.total} cards</span>
                         </div>
                         <div class="stat">
-                            <span>✅</span>
+                            <span><i class="fa-solid fa-check"></i></span>
                             <span>${stats.done} done</span>
                         </div>
                     </div>
@@ -699,7 +238,7 @@
         // Render color picker
         function renderColorPicker(selectedColor = colorThemes[0].gradient) {
             const colorPicker = document.getElementById('colorPicker');
-            
+
             colorPicker.innerHTML = colorThemes.map((theme, index) => `
                 <div class="color-option ${theme.gradient === selectedColor ? 'selected' : ''}" 
                      style="background: ${theme.gradient}" 
@@ -712,7 +251,7 @@
         // Render workspace color picker
         function renderWorkspaceColorPicker(selectedColor = colorThemes[0].gradient) {
             const colorPicker = document.getElementById('workspaceColorPicker');
-            
+
             colorPicker.innerHTML = colorThemes.map((theme, index) => `
                 <div class="color-option ${theme.gradient === selectedColor ? 'selected' : ''}" 
                      style="background: ${theme.gradient}" 
@@ -725,7 +264,7 @@
         // Select color theme
         function selectColor(gradient) {
             selectedBackgroundColor = gradient;
-            
+
             // Update color picker UI
             document.querySelectorAll('#colorPicker .color-option').forEach(option => {
                 option.classList.remove('selected');
@@ -736,10 +275,10 @@
         // Select workspace color theme
         function selectWorkspaceColor(gradient) {
             selectedWorkspaceColor = gradient;
-            
+
             // Update background immediately
             document.body.style.background = gradient;
-            
+
             // Update color picker UI
             document.querySelectorAll('#workspaceColorPicker .color-option').forEach(option => {
                 option.classList.remove('selected');
@@ -753,7 +292,7 @@
                 name: 'My workspace',
                 backgroundColor: colorThemes[0].gradient
             };
-            
+
             document.getElementById('workspaceTitle').value = workspaceSettings.name;
             selectedWorkspaceColor = workspaceSettings.backgroundColor;
             renderWorkspaceColorPicker(selectedWorkspaceColor);
@@ -767,7 +306,7 @@
         // Render all boards
         function renderBoards() {
             const boardsGrid = document.getElementById('boardsGrid');
-            
+
             if (boards.length === 0) {
                 boardsGrid.innerHTML = `
                     <div class="empty-state">
@@ -804,7 +343,7 @@
         function openBoard(boardId) {
             // Store the current board ID in localStorage so the kanban page can pick it up
             localStorage.setItem('currentBoardId', boardId);
-            
+
             // Navigate to the kanban board page
             window.location.href = 'board.html';
         }
@@ -817,10 +356,10 @@
             if (confirm(`Are you sure you want to delete "${board.title}"?\n\nThis will also delete all cards in this board. This action cannot be undone.`)) {
                 // Remove board
                 boards = boards.filter(b => b.id !== boardId);
-                
+
                 // Remove board's cards
                 localStorage.removeItem(`kanbanCards_${boardId}`);
-                
+
                 saveBoards();
                 renderBoards();
             }
@@ -869,15 +408,15 @@
             // Create and download file
             const dataStr = JSON.stringify(exportData, null, 2);
             const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            
+
             const link = document.createElement('a');
             link.href = URL.createObjectURL(dataBlob);
             link.download = `kanban-boards-${new Date().toISOString().split('T')[0]}.json`;
             link.click();
-            
+
             // Cleanup
             URL.revokeObjectURL(link.href);
-            
+
             alert(`Successfully exported ${boards.length} boards with all their cards!`);
         }
 
@@ -890,10 +429,10 @@
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 try {
                     const importData = JSON.parse(e.target.result);
-                    
+
                     // Validate file structure
                     if (!importData.boards || !importData.cards || !importData.version) {
                         throw new Error('Invalid file format');
@@ -968,12 +507,12 @@
         }
 
         // Form submission
-        document.getElementById('boardForm').addEventListener('submit', function(e) {
+        document.getElementById('boardForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             const title = document.getElementById('boardTitle').value.trim();
             const description = document.getElementById('boardDescription').value.trim();
-            
+
             if (!title) return;
 
             if (currentEditBoardId) {
@@ -1004,25 +543,25 @@
         });
 
         // Workspace form submission
-        document.getElementById('workspaceForm').addEventListener('submit', function(e) {
+        document.getElementById('workspaceForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             const name = document.getElementById('workspaceTitle').value.trim();
-            
+
             if (!name) return;
 
             // Update workspace
             saveWorkspaceSettings(name, selectedWorkspaceColor);
             document.getElementById('workspaceName').textContent = name;
-            
+
             closeWorkspaceModal();
         });
 
         // Close modal when clicking outside
-        window.addEventListener('click', function(e) {
+        window.addEventListener('click', function (e) {
             const boardModal = document.getElementById('boardModal');
             const workspaceModal = document.getElementById('workspaceModal');
-            
+
             if (e.target === boardModal) {
                 closeModal();
             }
@@ -1032,7 +571,7 @@
         });
 
         // Close modal with Escape key
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 closeModal();
                 closeWorkspaceModal();
@@ -1044,4 +583,5 @@
         renderBoards();
     </script>
 </body>
+
 </html>
