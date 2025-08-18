@@ -4,15 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kanban Todo Board</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: "Open Sans", sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
@@ -54,7 +57,6 @@
         .header h1 {
             color: white;
             font-size: 2.5rem;
-            font-weight: 300;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
             margin: 0;
         }
@@ -111,7 +113,6 @@
         }
 
         .column-title {
-            font-weight: 600;
             color: white;
             font-size: 1.1rem;
         }
@@ -155,7 +156,6 @@
         }
 
         .cards-container {
-            min-height: 200px;
             padding: 10px 0;
         }
 
@@ -188,7 +188,6 @@
         }
 
         .card-title {
-            font-weight: 600;
             color: #333;
             margin-bottom: 5px;
             min-height: 20px;
@@ -277,14 +276,12 @@
 
         .modal-title {
             font-size: 1.3rem;
-            font-weight: 600;
             color: #333;
         }
 
         .close {
             color: #aaa;
             font-size: 28px;
-            font-weight: bold;
             cursor: pointer;
             line-height: 1;
         }
@@ -300,7 +297,6 @@
         .form-group label {
             display: block;
             margin-bottom: 5px;
-            font-weight: 500;
             color: #555;
         }
 
@@ -310,7 +306,6 @@
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            font-family: inherit;
             font-size: 0.9rem;
         }
 
@@ -398,11 +393,9 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
-            font-weight: bold;
             font-size: 1.2rem;
             text-shadow: 0 1px 3px rgba(0,0,0,0.5);
         }
-
         @media (max-width: 768px) {
             .board {
                 flex-direction: column;
@@ -457,7 +450,8 @@
         <div class="header-content">
             <button class="back-btn" onclick="goBackToBoards()" title="Back to Boards">← Boards</button>
             <h1 id="boardTitle">Kanban Todo Board</h1>
-            <button class="settings-btn" onclick="openSettingsModal()" title="Board Settings">⚙️ Settings</button>
+            <button class="settings-btn" onclick="openSettingsModal()" title="Board Settings"><i class="fa-solid fa-gear"></i>
+ Settings</button>
         </div>
     </div>
 
