@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kanban Todo Board</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         * {
             margin: 0;
@@ -38,6 +43,10 @@
         }
 
         .back-btn {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
             background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
@@ -57,13 +66,15 @@
         .header h1 {
             color: white;
             font-size: 2.5rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             margin: 0;
         }
 
         .settings-btn {
             position: absolute;
             right: 0;
+            top: 50%;
+            transform: translateY(-50%);
             background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
@@ -164,7 +175,7 @@
             border-radius: 8px;
             padding: 15px;
             margin-bottom: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             cursor: grab;
             transition: transform 0.2s, box-shadow 0.2s;
             position: relative;
@@ -174,7 +185,7 @@
 
         .card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .card.dragging {
@@ -251,7 +262,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
         }
@@ -263,7 +274,7 @@
             border-radius: 12px;
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             min-height: fit-content;
         }
 
@@ -307,11 +318,13 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 0.9rem;
+            resize: none;
         }
 
         .form-group textarea {
             resize: vertical;
             min-height: 80px;
+            resize: none;
         }
 
         .modal-actions {
@@ -377,13 +390,13 @@
 
         .color-option:hover {
             transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .color-option.selected {
             border-color: #333;
             transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
         }
 
         .color-option.selected::after {
@@ -394,32 +407,28 @@
             transform: translate(-50%, -50%);
             color: white;
             font-size: 1.2rem;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
         }
+
         @media (max-width: 768px) {
             .board {
                 flex-direction: column;
                 gap: 15px;
             }
-            
+
             .column {
                 min-width: auto;
                 width: 100%;
                 max-width: none;
             }
-            
+
             .header h1 {
                 font-size: 2rem;
             }
-            
+
             .header-content {
                 flex-direction: column;
                 gap: 15px;
-            }
-
-            .settings-btn {
-                position: static;
-                margin-top: 10px;
             }
 
             .color-picker-grid {
@@ -445,13 +454,15 @@
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <div class="header-content">
             <button class="back-btn" onclick="goBackToBoards()" title="Back to Boards">← Boards</button>
             <h1 id="boardTitle">Kanban Todo Board</h1>
-            <button class="settings-btn" onclick="openSettingsModal()" title="Board Settings"><i class="fa-solid fa-gear"></i>
- Settings</button>
+            <button class="settings-btn" onclick="openSettingsModal()" title="Board Settings"><i
+                    class="fa-solid fa-gear"></i>
+                Settings</button>
         </div>
     </div>
 
@@ -462,7 +473,8 @@
                 <button class="add-card-btn" onclick="openAddCardModal('backlog')">+ Add Card</button>
             </div>
             <div class="cards-container" id="backlog-cards"></div>
-            <button class="mass-delete-btn" id="backlog-mass-delete" onclick="massDeleteCards('backlog')" title="Delete all cards in this column">🔥</button>
+            <button class="mass-delete-btn" id="backlog-mass-delete" onclick="massDeleteCards('backlog')"
+                title="Delete all cards in this column">🔥</button>
         </div>
 
         <div class="column" data-column="todo">
@@ -471,7 +483,8 @@
                 <button class="add-card-btn" onclick="openAddCardModal('todo')">+ Add Card</button>
             </div>
             <div class="cards-container" id="todo-cards"></div>
-            <button class="mass-delete-btn" id="todo-mass-delete" onclick="massDeleteCards('todo')" title="Delete all cards in this column">🔥</button>
+            <button class="mass-delete-btn" id="todo-mass-delete" onclick="massDeleteCards('todo')"
+                title="Delete all cards in this column">🔥</button>
         </div>
 
         <div class="column" data-column="doing">
@@ -480,7 +493,8 @@
                 <button class="add-card-btn" onclick="openAddCardModal('doing')">+ Add Card</button>
             </div>
             <div class="cards-container" id="doing-cards"></div>
-            <button class="mass-delete-btn" id="doing-mass-delete" onclick="massDeleteCards('doing')" title="Delete all cards in this column">🔥</button>
+            <button class="mass-delete-btn" id="doing-mass-delete" onclick="massDeleteCards('doing')"
+                title="Delete all cards in this column">🔥</button>
         </div>
 
         <div class="column" data-column="done">
@@ -489,7 +503,8 @@
                 <button class="add-card-btn" onclick="openAddCardModal('done')">+ Add Card</button>
             </div>
             <div class="cards-container" id="done-cards"></div>
-            <button class="mass-delete-btn" id="done-mass-delete" onclick="massDeleteCards('done')" title="Delete all cards in this column">🔥</button>
+            <button class="mass-delete-btn" id="done-mass-delete" onclick="massDeleteCards('done')"
+                title="Delete all cards in this column">🔥</button>
         </div>
     </div>
 
@@ -511,7 +526,8 @@
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="deleteBtn" onclick="deleteCard()" style="display: none;">Delete</button>
+                    <button type="button" class="btn btn-danger" id="deleteBtn" onclick="deleteCard()"
+                        style="display: none;">Delete</button>
                     <button type="submit" class="btn btn-primary" id="saveBtn">Save Card</button>
                 </div>
             </form>
@@ -532,7 +548,8 @@
                 </div>
                 <div class="form-group">
                     <label for="settingsBoardDescription">Description</label>
-                    <textarea id="settingsBoardDescription" placeholder="What is this board about? (optional)"></textarea>
+                    <textarea id="settingsBoardDescription"
+                        placeholder="What is this board about? (optional)"></textarea>
                 </div>
                 <div class="form-group">
                     <label>Background Color</label>
@@ -542,7 +559,8 @@
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeSettingsModal()">Cancel</button>
-                    <button type="button" class="btn btn-danger" onclick="deleteBoardFromSettings()">Delete Board</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteBoardFromSettings()">Delete
+                        Board</button>
                     <button type="submit" class="btn btn-primary">Update Board</button>
                 </div>
             </form>
@@ -575,7 +593,7 @@
         function initializeBoard() {
             // Get board ID from localStorage (set by dashboard)
             currentBoardId = localStorage.getItem('currentBoardId');
-            
+
             if (!currentBoardId) {
                 // If no board ID, redirect to dashboard or show error
                 document.body.innerHTML = `
@@ -591,11 +609,11 @@
             // Load board data
             const boards = JSON.parse(localStorage.getItem('kanbanBoards')) || [];
             const currentBoard = boards.find(board => board.id === currentBoardId);
-            
+
             if (currentBoard) {
                 document.getElementById('boardTitle').textContent = currentBoard.title;
                 document.title = `${currentBoard.title} - Kanban Board`;
-                
+
                 // Apply saved background color
                 if (currentBoard.backgroundColor) {
                     document.body.style.background = currentBoard.backgroundColor;
@@ -630,7 +648,7 @@
         function saveBoardColor(backgroundColor) {
             const boards = JSON.parse(localStorage.getItem('kanbanBoards')) || [];
             const boardIndex = boards.findIndex(board => board.id === currentBoardId);
-            
+
             if (boardIndex !== -1) {
                 boards[boardIndex].backgroundColor = backgroundColor;
                 boards[boardIndex].updatedAt = new Date().toISOString();
@@ -659,7 +677,7 @@
         // Create card HTML
         function createCardHTML(card) {
             const truncatedDescription = truncateText(card.description || '', 150);
-            
+
             return `
                 <div class="card" draggable="true" data-card-id="${card.id}">
                     <div class="card-content">
@@ -678,7 +696,7 @@
         // Render all cards
         function renderCards() {
             const columns = ['backlog', 'todo', 'doing', 'done'];
-            
+
             columns.forEach(column => {
                 const container = document.getElementById(`${column}-cards`);
                 const columnCards = cards.filter(card => card.column === column);
@@ -698,11 +716,11 @@
         // Show or don't show buttons
         function updateMassDeleteButtons() {
             const columns = ['backlog', 'todo', 'doing', 'done'];
-            
+
             columns.forEach(column => {
                 const columnCards = cards.filter(card => card.column === column);
                 const massDeleteBtn = document.getElementById(`${column}-mass-delete`);
-                
+
                 if (columnCards.length > 0) {
                     massDeleteBtn.style.display = 'block';
                 } else {
@@ -714,22 +732,22 @@
         // Mass delete all cards in a specific column
         function massDeleteCards(column) {
             const columnCards = cards.filter(card => card.column === column);
-            
+
             if (columnCards.length === 0) return;
-            
+
             const confirmMessage = `Are you sure you want to delete ALL ${columnCards.length} card(s) in the ${column.toUpperCase()} column?\n\nThis action cannot be undone.`;
-            
+
             if (confirm(confirmMessage)) {
                 cards = cards.filter(card => card.column !== column);
                 saveCards();
                 renderCards();
             }
         }
-        
+
         // Render color picker
         function renderColorPicker() {
             const colorPicker = document.getElementById('colorPicker');
-            
+
             colorPicker.innerHTML = colorThemes.map((theme, index) => `
                 <div class="color-option ${theme.gradient === selectedBackgroundColor ? 'selected' : ''}" 
                      style="background: ${theme.gradient}" 
@@ -742,10 +760,10 @@
         // Select color theme
         function selectColor(gradient) {
             selectedBackgroundColor = gradient;
-            
+
             // Update background immediately
             document.body.style.background = gradient;
-            
+
             // Update color picker UI
             document.querySelectorAll('.color-option').forEach(option => {
                 option.classList.remove('selected');
@@ -758,14 +776,14 @@
             // Load current board data
             const boards = JSON.parse(localStorage.getItem('kanbanBoards')) || [];
             const currentBoard = boards.find(board => board.id === currentBoardId);
-            
+
             if (currentBoard) {
                 document.getElementById('settingsBoardTitle').value = currentBoard.title;
                 document.getElementById('settingsBoardDescription').value = currentBoard.description || '';
                 selectedBackgroundColor = currentBoard.backgroundColor || colorThemes[0].gradient;
                 renderColorPicker();
             }
-            
+
             document.getElementById('settingsModal').style.display = 'block';
         }
 
@@ -779,10 +797,10 @@
                 const boards = JSON.parse(localStorage.getItem('kanbanBoards')) || [];
                 const updatedBoards = boards.filter(b => b.id !== currentBoardId);
                 localStorage.setItem('kanbanBoards', JSON.stringify(updatedBoards));
-                
+
                 // Remove board's cards
                 localStorage.removeItem(`kanbanCards_${currentBoardId}`);
-                
+
                 // Navigate back to dashboard
                 localStorage.removeItem('currentBoardId');
                 window.location.href = 'boards.html';
@@ -839,12 +857,12 @@
         }
 
         // Form submission for cards
-        document.getElementById('cardForm').addEventListener('submit', function(e) {
+        document.getElementById('cardForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             const title = document.getElementById('cardTitle').value.trim();
-            const description = document.getElementById('cardDescription').value.trim();
-            
+            const description = document.getElementById('cardDescription').value.trim().slice(0, 100);
+        
             if (!title) return;
 
             if (currentCardId) {
@@ -874,25 +892,25 @@
         });
 
         // Form submission for board settings
-        document.getElementById('boardSettingsForm').addEventListener('submit', function(e) {
+        document.getElementById('boardSettingsForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             const title = document.getElementById('settingsBoardTitle').value.trim();
             const description = document.getElementById('settingsBoardDescription').value.trim();
-            
+
             if (!title) return;
 
             // Update board data
             const boards = JSON.parse(localStorage.getItem('kanbanBoards')) || [];
             const boardIndex = boards.findIndex(board => board.id === currentBoardId);
-            
+
             if (boardIndex !== -1) {
                 boards[boardIndex].title = title;
                 boards[boardIndex].description = description;
                 boards[boardIndex].backgroundColor = selectedBackgroundColor;
                 boards[boardIndex].updatedAt = new Date().toISOString();
                 localStorage.setItem('kanbanBoards', JSON.stringify(boards));
-                
+
                 // Update page title and board title
                 document.getElementById('boardTitle').textContent = title;
                 document.title = `${title} - Kanban Board`;
@@ -941,12 +959,12 @@
         function handleDrop(e) {
             e.preventDefault();
             this.classList.remove('drag-over');
-            
+
             if (!draggedCard) return;
 
             const newColumn = this.dataset.column;
             const cardId = draggedCard.dataset.cardId;
-            
+
             // Update card column
             const cardIndex = cards.findIndex(card => card.id === cardId);
             if (cardIndex !== -1) {
@@ -958,10 +976,10 @@
         }
 
         // Close modal when clicking outside
-        window.addEventListener('click', function(e) {
+        window.addEventListener('click', function (e) {
             const cardModal = document.getElementById('cardModal');
             const settingsModal = document.getElementById('settingsModal');
-            
+
             if (e.target === cardModal) {
                 closeModal();
             }
@@ -971,7 +989,7 @@
         });
 
         // Close modal with Escape key
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 closeModal();
                 closeSettingsModal();
@@ -980,6 +998,8 @@
 
         // Initialize the app
         initializeBoard();
+
     </script>
 </body>
+
 </html>
