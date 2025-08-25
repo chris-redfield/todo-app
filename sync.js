@@ -200,7 +200,7 @@ class SyncManager {
         }
 
         try {
-            const response = await fetch(`${this.serverUrl}/api/sync/data/${this.userHash}`, {
+            const response = await fetch(`${this.serverUrl}/sync/data/${this.userHash}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             });
