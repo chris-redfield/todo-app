@@ -1,18 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Kanban Boards Dashboard</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: "Open Sans", sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
@@ -54,7 +60,6 @@
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: bold;
             font-size: 1.2rem;
             border: 2px solid rgba(255, 255, 255, 0.4);
         }
@@ -73,8 +78,7 @@
         .logo {
             color: white;
             font-size: 2rem;
-            font-weight: 300;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .boards-section {
@@ -87,7 +91,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 30px;
-            margin-top: -15px; /* Pull up to align better with workspace section */
+            margin-top: -15px;
+
         }
 
         .header-actions {
@@ -100,7 +105,8 @@
             background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
-            padding: 12px 16px; /* Slightly larger padding to match workspace card height */
+            padding: 12px 16px;
+            /* Slightly larger padding to match workspace card height */
             border-radius: 8px;
             cursor: pointer;
             font-size: 0.9rem;
@@ -110,7 +116,8 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            height: 44px; /* Fixed height to match workspace card */
+            height: 44px;
+            /* Fixed height to match workspace card */
         }
 
         .action-button:hover {
@@ -124,8 +131,8 @@
         .section-title {
             color: white;
             font-size: 1.3rem;
-            font-weight: 500;
             display: flex;
+            font-weight: 500;
             align-items: center;
             gap: 10px;
         }
@@ -150,7 +157,7 @@
 
         .board-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
 
         .board-card.create-new {
@@ -177,7 +184,6 @@
         .create-text {
             color: rgba(255, 255, 255, 0.9);
             font-size: 1.1rem;
-            font-weight: 500;
         }
 
         .board-header {
@@ -190,7 +196,6 @@
         .board-title {
             color: white;
             font-size: 1.2rem;
-            font-weight: 600;
             margin-bottom: 8px;
             line-height: 1.3;
         }
@@ -250,6 +255,10 @@
             background: rgba(255, 255, 255, 0.3);
         }
 
+        textarea {
+            resize: none;
+        }
+
         .action-btn.delete:hover {
             background: rgba(255, 71, 87, 0.8);
         }
@@ -263,19 +272,19 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            overflow-y: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow-y: hidden;
             -webkit-overflow-scrolling: touch;
         }
 
         .modal-content {
             background-color: white;
-            margin: 10% auto;
+            margin: 5% auto;
             padding: 30px;
             border-radius: 12px;
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             min-height: fit-content;
         }
 
@@ -288,15 +297,12 @@
 
         .modal-title {
             font-size: 1.3rem;
-            font-weight: 600;
             color: #333;
         }
 
         .close {
             color: #aaa;
             font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
             line-height: 1;
         }
 
@@ -311,7 +317,6 @@
         .form-group label {
             display: block;
             margin-bottom: 5px;
-            font-weight: 500;
             color: #555;
         }
 
@@ -321,7 +326,6 @@
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
-            font-family: inherit;
             font-size: 0.9rem;
         }
 
@@ -382,7 +386,6 @@
         .empty-state h3 {
             font-size: 1.5rem;
             margin-bottom: 10px;
-            font-weight: 300;
         }
 
         .empty-state p {
@@ -410,13 +413,13 @@
 
         .color-option:hover {
             transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .color-option.selected {
             border-color: #333;
             transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
         }
 
         .color-option.selected::after {
@@ -426,9 +429,8 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
-            font-weight: bold;
             font-size: 1.2rem;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
         }
 
         @media (max-width: 768px) {
@@ -437,23 +439,23 @@
                 gap: 20px;
                 text-align: center;
             }
-            
+
             .boards-grid {
                 grid-template-columns: 1fr;
                 gap: 15px;
             }
-            
+
             .section-header {
                 flex-direction: column;
                 gap: 15px;
                 text-align: center;
             }
-            
+
             .header-actions {
                 flex-direction: column;
                 width: 100%;
             }
-            
+
             .action-button {
                 justify-content: center;
             }
@@ -481,11 +483,12 @@
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <div class="logo">Kanban Boards</div>
         <div class="user-section" onclick="openWorkspaceSettings()">
-            <div class="user-avatar">U</div>
+            <div class="user-avatar"><i class="fa-solid fa-user"></i></div>
             <div class="user-info">
                 <h2 id="workspaceName">My workspace</h2>
                 <p>Local boards</p>
@@ -496,7 +499,7 @@
     <div class="boards-section">
         <div class="section-header">
             <h2 class="section-title">
-                <span>👥</span>
+                <span><i class="fa-solid fa-list-check"></i></span>
                 Your boards
             </h2>
         </div>
@@ -531,7 +534,8 @@
                 </div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                    <button type="button" class="btn btn-danger" id="deleteBoardBtn" onclick="deleteBoardFromModal()" style="display: none;">Delete Board</button>
+                    <button type="button" class="btn btn-danger" id="deleteBoardBtn" onclick="deleteBoardFromModal()"
+                        style="display: none;">Delete Board</button>
                     <button type="submit" class="btn btn-primary" id="saveBoardBtn">Create Board</button>
                 </div>
             </form>
@@ -560,10 +564,12 @@
                     <label>Workspace Management</label>
                     <div style="display: flex; gap: 10px; margin-top: 10px;">
                         <button type="button" class="btn btn-secondary" onclick="exportBoards()" style="flex: 1;">
-                            📥 Export Boards
+                            <i class="fa-solid fa-file-arrow-down"></i>
+                            Export Boards
                         </button>
                         <button type="button" class="btn btn-secondary" onclick="triggerImport()" style="flex: 1;">
-                            📤 Import Boards
+                            <i class="fa-solid fa-file-import"></i>
+                            Import Boards
                         </button>
                     </div>
                 </div>
@@ -601,7 +607,7 @@
                 name: 'My workspace',
                 backgroundColor: colorThemes[0].gradient
             };
-            
+
             document.getElementById('workspaceName').textContent = workspaceSettings.name;
             document.body.style.background = workspaceSettings.backgroundColor;
             selectedWorkspaceColor = workspaceSettings.backgroundColor;
@@ -658,7 +664,7 @@
         function createBoardCardHTML(board) {
             const stats = getBoardStats(board.id);
             const backgroundColor = board.backgroundColor || 'rgba(255, 255, 255, 0.15)';
-            
+
             return `
                 <div class="board-card" onclick="openBoard('${board.id}')" style="background: ${backgroundColor}">
                     <div class="board-actions">
@@ -673,11 +679,11 @@
                     <div class="board-description">${board.description || 'No description provided'}</div>
                     <div class="board-stats">
                         <div class="stat">
-                            <span>📋</span>
+                            <span><i class="fa-regular fa-clipboard"></i></span>
                             <span>${stats.total} cards</span>
                         </div>
                         <div class="stat">
-                            <span>✅</span>
+                            <span><i class="fa-solid fa-check"></i></span>
                             <span>${stats.done} done</span>
                         </div>
                     </div>
@@ -699,7 +705,7 @@
         // Render color picker
         function renderColorPicker(selectedColor = colorThemes[0].gradient) {
             const colorPicker = document.getElementById('colorPicker');
-            
+
             colorPicker.innerHTML = colorThemes.map((theme, index) => `
                 <div class="color-option ${theme.gradient === selectedColor ? 'selected' : ''}" 
                      style="background: ${theme.gradient}" 
@@ -712,7 +718,7 @@
         // Render workspace color picker
         function renderWorkspaceColorPicker(selectedColor = colorThemes[0].gradient) {
             const colorPicker = document.getElementById('workspaceColorPicker');
-            
+
             colorPicker.innerHTML = colorThemes.map((theme, index) => `
                 <div class="color-option ${theme.gradient === selectedColor ? 'selected' : ''}" 
                      style="background: ${theme.gradient}" 
@@ -725,7 +731,7 @@
         // Select color theme
         function selectColor(gradient) {
             selectedBackgroundColor = gradient;
-            
+
             // Update color picker UI
             document.querySelectorAll('#colorPicker .color-option').forEach(option => {
                 option.classList.remove('selected');
@@ -736,10 +742,10 @@
         // Select workspace color theme
         function selectWorkspaceColor(gradient) {
             selectedWorkspaceColor = gradient;
-            
+
             // Update background immediately
             document.body.style.background = gradient;
-            
+
             // Update color picker UI
             document.querySelectorAll('#workspaceColorPicker .color-option').forEach(option => {
                 option.classList.remove('selected');
@@ -753,7 +759,7 @@
                 name: 'My workspace',
                 backgroundColor: colorThemes[0].gradient
             };
-            
+
             document.getElementById('workspaceTitle').value = workspaceSettings.name;
             selectedWorkspaceColor = workspaceSettings.backgroundColor;
             renderWorkspaceColorPicker(selectedWorkspaceColor);
@@ -767,7 +773,7 @@
         // Render all boards
         function renderBoards() {
             const boardsGrid = document.getElementById('boardsGrid');
-            
+
             if (boards.length === 0) {
                 boardsGrid.innerHTML = `
                     <div class="empty-state">
@@ -804,7 +810,7 @@
         function openBoard(boardId) {
             // Store the current board ID in localStorage so the kanban page can pick it up
             localStorage.setItem('currentBoardId', boardId);
-            
+
             // Navigate to the kanban board page
             window.location.href = 'board.html';
         }
@@ -817,10 +823,10 @@
             if (confirm(`Are you sure you want to delete "${board.title}"?\n\nThis will also delete all cards in this board. This action cannot be undone.`)) {
                 // Remove board
                 boards = boards.filter(b => b.id !== boardId);
-                
+
                 // Remove board's cards
                 localStorage.removeItem(`kanbanCards_${boardId}`);
-                
+
                 saveBoards();
                 renderBoards();
             }
@@ -869,15 +875,15 @@
             // Create and download file
             const dataStr = JSON.stringify(exportData, null, 2);
             const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            
+
             const link = document.createElement('a');
             link.href = URL.createObjectURL(dataBlob);
             link.download = `kanban-boards-${new Date().toISOString().split('T')[0]}.json`;
             link.click();
-            
+
             // Cleanup
             URL.revokeObjectURL(link.href);
-            
+
             alert(`Successfully exported ${boards.length} boards with all their cards!`);
         }
 
@@ -890,10 +896,10 @@
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 try {
                     const importData = JSON.parse(e.target.result);
-                    
+
                     // Validate file structure
                     if (!importData.boards || !importData.cards || !importData.version) {
                         throw new Error('Invalid file format');
@@ -968,12 +974,12 @@
         }
 
         // Form submission
-        document.getElementById('boardForm').addEventListener('submit', function(e) {
+        document.getElementById('boardForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             const title = document.getElementById('boardTitle').value.trim();
             const description = document.getElementById('boardDescription').value.trim();
-            
+
             if (!title) return;
 
             if (currentEditBoardId) {
@@ -1004,25 +1010,25 @@
         });
 
         // Workspace form submission
-        document.getElementById('workspaceForm').addEventListener('submit', function(e) {
+        document.getElementById('workspaceForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             const name = document.getElementById('workspaceTitle').value.trim();
-            
+
             if (!name) return;
 
             // Update workspace
             saveWorkspaceSettings(name, selectedWorkspaceColor);
             document.getElementById('workspaceName').textContent = name;
-            
+
             closeWorkspaceModal();
         });
 
         // Close modal when clicking outside
-        window.addEventListener('click', function(e) {
+        window.addEventListener('click', function (e) {
             const boardModal = document.getElementById('boardModal');
             const workspaceModal = document.getElementById('workspaceModal');
-            
+
             if (e.target === boardModal) {
                 closeModal();
             }
@@ -1032,7 +1038,7 @@
         });
 
         // Close modal with Escape key
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 closeModal();
                 closeWorkspaceModal();
@@ -1044,4 +1050,5 @@
         renderBoards();
     </script>
 </body>
+
 </html>
