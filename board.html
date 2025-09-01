@@ -21,169 +21,208 @@
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
             transition: background 0.3s ease;
+            overflow-x: hidden;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 10px 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            margin-bottom: 20px;
         }
 
         .header-content {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 20px;
-            max-width: 1400px;
+            justify-content: space-between;
+            max-width: 100%;
             margin: 0 auto;
+            padding: 0 15px;
             position: relative;
         }
 
-        .back-btn {
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
+        .back-btn, .settings-btn {
             background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.2s;
+            font-size: 0.8rem;
+            transition: all 0.2s;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
+            white-space: nowrap;
+            min-width: 60px;
         }
 
-        .back-btn:hover {
+        .back-btn:hover, .settings-btn:hover {
             background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
         }
 
         .header h1 {
             color: white;
-            font-size: 2.5rem;
+            font-size: clamp(1.2rem, 4vw, 2.5rem);
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             margin: 0;
-        }
-
-        .settings-btn {
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .settings-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+            text-align: center;
+            flex: 1;
+            padding: 0 10px;
+            word-break: break-word;
+            line-height: 1.2;
         }
 
         .board {
             display: flex;
-            gap: 20px;
-            max-width: 1400px;
+            gap: 15px;
+            max-width: 100%;
             margin: 0 auto;
             overflow-x: auto;
             padding-bottom: 20px;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .board::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .board::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .board::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
         }
 
         .column {
-            width: 300px;
-            max-width: 300px;
-            min-width: 300px;
+            width: 280px;
+            max-width: 280px;
+            min-width: 280px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 12px;
-            padding: 15px;
+            padding: 12px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             flex-shrink: 0;
             position: relative;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            max-height: 80vh;
         }
 
         .column-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            padding: 10px 15px;
+            margin-bottom: 12px;
+            padding: 8px 12px;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 8px;
+            flex-shrink: 0;
         }
 
         .column-title {
             color: white;
-            font-size: 1.1rem;
+            font-size: 1rem;
+            font-weight: 600;
         }
 
         .add-card-btn {
             background: rgba(255, 255, 255, 0.3);
             border: none;
             color: white;
-            padding: 5px 10px;
+            padding: 4px 8px;
             border-radius: 5px;
             cursor: pointer;
-            transition: background 0.2s;
-            font-size: 0.9rem;
+            transition: all 0.2s;
+            font-size: 0.8rem;
+            white-space: nowrap;
         }
 
         .add-card-btn:hover {
             background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
         }
 
         .mass-delete-btn {
             position: absolute;
-            bottom: 15px;
-            right: 15px;
-            background: rgba(255, 255, 255, 0.3);
+            bottom: 12px;
+            right: 12px;
+            background: rgba(255, 100, 100, 0.3);
             border: none;
             color: white;
-            padding: 8px 10px;
+            padding: 6px 8px;
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s ease;
-            font-size: 1rem;
+            font-size: 0.9rem;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             display: none;
+            z-index: 10;
         }
 
         .mass-delete-btn:hover {
-            background: rgba(255, 100, 100, 0.4);
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
+            background: rgba(255, 100, 100, 0.5);
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
         }
 
         .cards-container {
-            padding: 10px 0;
+            padding: 8px 0;
+            flex: 1;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+        }
+
+        .cards-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .cards-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .cards-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
         }
 
         .card {
             background: white;
             border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
+            padding: 12px;
+            margin-bottom: 8px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             cursor: grab;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.2s;
             position: relative;
             width: 100%;
             word-wrap: break-word;
+            touch-action: manipulation;
         }
 
         .card:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card:active {
+            cursor: grabbing;
         }
 
         .card.dragging {
@@ -193,34 +232,37 @@
         }
 
         .card-content {
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .card-title {
             color: #333;
-            margin-bottom: 5px;
-            min-height: 20px;
+            margin-bottom: 4px;
+            min-height: 18px;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            font-size: 0.9rem;
+            font-weight: 600;
+            line-height: 1.3;
         }
 
         .card-description {
             color: #666;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             line-height: 1.4;
-            min-height: 18px;
             word-wrap: break-word;
             overflow-wrap: break-word;
             overflow: hidden;
             display: -webkit-box;
-            -webkit-line-clamp: 4;
+            -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
         }
 
         .card-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 10px;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
         }
 
         .card-action-btn {
@@ -228,22 +270,23 @@
             border: none;
             color: #666;
             cursor: pointer;
-            font-size: 0.8rem;
-            padding: 2px 5px;
+            font-size: 0.75rem;
+            padding: 3px 6px;
             border-radius: 3px;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            touch-action: manipulation;
         }
 
-        .card-action-btn:hover {
+        .card-action-btn:hover, .card-action-btn:active {
             background: #f0f0f0;
             color: #333;
         }
 
         .card-timestamp {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #999;
             text-align: right;
-            margin-top: 8px;
+            margin-top: 6px;
         }
 
         .column.drag-over {
@@ -263,40 +306,52 @@
             background-color: rgba(0, 0, 0, 0.5);
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
+            padding: 10px;
         }
 
         .modal-content {
             background-color: white;
-            margin: 5% auto;
-            padding: 30px;
+            margin: 0 auto;
+            padding: 20px;
             border-radius: 12px;
-            width: 90%;
-            max-width: 500px;
+            width: 100%;
+            max-width: 450px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            min-height: fit-content;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
         }
 
         .modal-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: #333;
+            font-weight: 600;
         }
 
         .close {
             color: #aaa;
-            font-size: 28px;
+            font-size: 24px;
             cursor: pointer;
             line-height: 1;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.2s;
         }
 
         .close:hover {
             color: #000;
+            background: #f5f5f5;
         }
 
         .form-group {
@@ -307,38 +362,52 @@
             display: block;
             margin-bottom: 5px;
             color: #555;
+            font-size: 0.9rem;
+            font-weight: 500;
         }
 
         .form-group input,
         .form-group textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            border: 2px solid #e1e1e1;
+            border-radius: 6px;
             font-size: 0.9rem;
-            resize: none;
+            transition: border-color 0.2s;
+            background: #fff;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
 
         .form-group textarea {
             resize: vertical;
             min-height: 80px;
-            resize: none;
+            max-height: 120px;
         }
 
         .modal-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             justify-content: flex-end;
             margin-top: 20px;
+            flex-wrap: wrap;
         }
 
         .btn {
-            padding: 10px 20px;
+            padding: 10px 16px;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.2s;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            touch-action: manipulation;
+            min-width: 80px;
         }
 
         .btn-primary {
@@ -348,6 +417,7 @@
 
         .btn-primary:hover {
             background: #5a6fd8;
+            transform: translateY(-1px);
         }
 
         .btn-secondary {
@@ -357,6 +427,7 @@
 
         .btn-secondary:hover {
             background: #d0d0d0;
+            transform: translateY(-1px);
         }
 
         .btn-danger {
@@ -366,20 +437,21 @@
 
         .btn-danger:hover {
             background: #ff3838;
+            transform: translateY(-1px);
         }
 
         /* Color Picker Styles */
         .color-picker-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            gap: 10px;
             margin-top: 10px;
         }
 
         .color-option {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
             cursor: pointer;
             border: 3px solid transparent;
             transition: all 0.2s ease;
@@ -404,51 +476,289 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
-            font-size: 1.2rem;
+            font-size: 1rem;
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
         }
 
-        @media (max-width: 768px) {
-            .board {
-                flex-direction: column;
-                gap: 15px;
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .header-content {
+                gap: 10px;
             }
-
+            
+            .back-btn, .settings-btn {
+                font-size: 0.75rem;
+                padding: 6px 10px;
+            }
+            
             .column {
-                min-width: auto;
-                width: 100%;
-                max-width: none;
+                width: 260px;
+                min-width: 260px;
+                max-width: 260px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
             }
 
-            .header h1 {
-                font-size: 2rem;
+            .header {
+                margin-bottom: 15px;
+                position: relative;
+                top: auto;
             }
 
             .header-content {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                gap: 5px;
+                padding: 0 10px;
+            }
+
+            .back-btn, .settings-btn {
+                font-size: 0.7rem;
+                padding: 6px 8px;
+                min-width: 50px;
+            }
+
+            .back-btn {
+                order: 1;
+            }
+
+            .header h1 {
+                order: 2;
+                font-size: clamp(1rem, 5vw, 1.5rem);
+                flex: 1;
+                text-align: center;
+                padding: 0 5px;
+            }
+
+            .settings-btn {
+                order: 3;
+            }
+
+            .board {
+                gap: 10px;
+                padding-bottom: 60px;
+            }
+
+            .column {
+                width: 240px;
+                min-width: 240px;
+                max-width: 240px;
+                max-height: 70vh;
+            }
+
+            .column-header {
+                padding: 6px 10px;
+                margin-bottom: 10px;
+            }
+
+            .column-title {
+                font-size: 0.9rem;
+            }
+
+            .add-card-btn {
+                font-size: 0.7rem;
+                padding: 3px 6px;
+            }
+
+            .card {
+                padding: 10px;
+                margin-bottom: 6px;
+            }
+
+            .card-title {
+                font-size: 0.85rem;
+            }
+
+            .card-description {
+                font-size: 0.75rem;
+                -webkit-line-clamp: 2;
+            }
+
+            .card-actions {
+                gap: 6px;
+                margin-top: 6px;
+            }
+
+            .card-action-btn {
+                font-size: 0.7rem;
+                padding: 2px 4px;
+            }
+
+            .modal-content {
+                width: 95%;
+                max-width: 95%;
+                padding: 15px;
+                margin: 10px auto;
+                top: auto;
+                transform: none;
+                position: relative;
+                max-height: 85vh;
+            }
+
+            .modal-title {
+                font-size: 1.1rem;
+            }
+
+            .modal-actions {
                 flex-direction: column;
-                gap: 15px;
+                gap: 8px;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+
+            .color-picker-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .color-option {
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .column {
+                width: 220px;
+                min-width: 220px;
+                max-width: 220px;
+                padding: 10px;
+            }
+
+            .back-btn, .settings-btn {
+                font-size: 0.65rem;
+                padding: 4px 6px;
+                min-width: 40px;
+            }
+
+            .header h1 {
+                font-size: clamp(0.9rem, 6vw, 1.3rem);
+            }
+
+            .modal-content {
+                width: 98%;
+                padding: 12px;
+                margin: 5px auto;
             }
 
             .color-picker-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
 
-            /* Mobile modal improvements */
+            .color-option {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .column {
+                width: 200px;
+                min-width: 200px;
+                max-width: 200px;
+            }
+
+            .back-btn span:not(.fa-solid) {
+                display: none;
+            }
+
+            .settings-btn span:not(.fa-solid) {
+                display: none;
+            }
+        }
+
+        /* Touch improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .card:hover {
+                transform: none;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .card:active {
+                transform: scale(0.98);
+            }
+
+            .btn:hover {
+                transform: none;
+            }
+
+            .btn:active {
+                transform: scale(0.95);
+            }
+
+            .add-card-btn:hover,
+            .card-action-btn:hover {
+                transform: none;
+                background: rgba(255, 255, 255, 0.3);
+            }
+
+            .add-card-btn:active {
+                transform: scale(0.95);
+            }
+
+            .card-action-btn:active {
+                background: #e0e0e0;
+            }
+        }
+
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .card {
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            }
+
             .modal-content {
-                margin: 5% auto;
-                margin-bottom: 20px;
-                width: 95%;
-                padding: 20px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            }
+        }
+
+        /* Landscape orientation on mobile */
+        @media screen and (max-height: 500px) and (orientation: landscape) {
+            .header {
+                margin-bottom: 10px;
             }
 
-            .modal-actions {
-                flex-direction: column;
+            .column {
+                max-height: 60vh;
             }
 
-            .btn {
-                width: 100%;
-                margin-bottom: 5px;
+            .modal-content {
+                max-height: 80vh;
             }
+        }
+
+        /* Accessibility improvements */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Focus styles for keyboard navigation */
+        .back-btn:focus,
+        .settings-btn:focus,
+        .add-card-btn:focus,
+        .card-action-btn:focus,
+        .btn:focus,
+        .close:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        .card:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
         }
     </style>
 </head>
@@ -456,11 +766,15 @@
 <body>
     <div class="header">
         <div class="header-content">
-            <button class="back-btn" onclick="goBackToBoards()" title="Back to Boards">← Boards</button>
+            <button class="back-btn" onclick="goBackToBoards()" title="Back to Boards">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Boards</span>
+            </button>
             <h1 id="boardTitle">Kanban Todo Board</h1>
-            <button class="settings-btn" onclick="openSettingsModal()" title="Board Settings"><i
-                    class="fa-solid fa-gear"></i>
-                Settings</button>
+            <button class="settings-btn" onclick="openSettingsModal()" title="Board Settings">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </button>
         </div>
     </div>
 
@@ -468,7 +782,7 @@
         <div class="column" data-column="backlog">
             <div class="column-header">
                 <span class="column-title">Backlog</span>
-                <button class="add-card-btn" onclick="openAddCardModal('backlog')">+ Add Card</button>
+                <button class="add-card-btn" onclick="openAddCardModal('backlog')">+ Add</button>
             </div>
             <div class="cards-container" id="backlog-cards"></div>
             <button class="mass-delete-btn" id="backlog-mass-delete" onclick="massDeleteCards('backlog')"
@@ -478,7 +792,7 @@
         <div class="column" data-column="todo">
             <div class="column-header">
                 <span class="column-title">TO-DO</span>
-                <button class="add-card-btn" onclick="openAddCardModal('todo')">+ Add Card</button>
+                <button class="add-card-btn" onclick="openAddCardModal('todo')">+ Add</button>
             </div>
             <div class="cards-container" id="todo-cards"></div>
             <button class="mass-delete-btn" id="todo-mass-delete" onclick="massDeleteCards('todo')"
@@ -488,7 +802,7 @@
         <div class="column" data-column="doing">
             <div class="column-header">
                 <span class="column-title">Doing</span>
-                <button class="add-card-btn" onclick="openAddCardModal('doing')">+ Add Card</button>
+                <button class="add-card-btn" onclick="openAddCardModal('doing')">+ Add</button>
             </div>
             <div class="cards-container" id="doing-cards"></div>
             <button class="mass-delete-btn" id="doing-mass-delete" onclick="massDeleteCards('doing')"
@@ -498,7 +812,7 @@
         <div class="column" data-column="done">
             <div class="column-header">
                 <span class="column-title">Done</span>
-                <button class="add-card-btn" onclick="openAddCardModal('done')">+ Add Card</button>
+                <button class="add-card-btn" onclick="openAddCardModal('done')">+ Add</button>
             </div>
             <div class="cards-container" id="done-cards"></div>
             <button class="mass-delete-btn" id="done-mass-delete" onclick="massDeleteCards('done')"
@@ -572,7 +886,7 @@
         let currentColumn = null;
         let draggedCard = null;
         let currentBoardId = null;
-        let selectedBackgroundColor = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; // Default purple
+        let selectedBackgroundColor = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
 
         // Color themes
         const colorThemes = [
@@ -589,37 +903,48 @@
 
         // Initialize board
         function initializeBoard() {
-            // Get board ID from localStorage (set by dashboard)
-            currentBoardId = localStorage.getItem('currentBoardId');
-
-            if (!currentBoardId) {
-                // If no board ID, redirect to dashboard or show error
-                document.body.innerHTML = `
-                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; color: white; text-align: center;">
-                        <h2>No Board Selected</h2>
-                        <p>Please select a board from the dashboard.</p>
-                        <button onclick="window.location.href='boards.html'" style="margin-top: 20px; padding: 10px 20px; background: rgba(255,255,255,0.2); border: none; color: white; border-radius: 5px; cursor: pointer;">Go to Dashboard</button>
-                    </div>
-                `;
-                return;
-            }
-
-            // Load board data
-            const boards = JSON.parse(localStorage.getItem('kanbanBoards')) || [];
-            const currentBoard = boards.find(board => board.id === currentBoardId);
-
-            if (currentBoard) {
-                document.getElementById('boardTitle').textContent = currentBoard.title;
-                document.title = `${currentBoard.title} - Kanban Board`;
-
-                // Apply saved background color
-                if (currentBoard.backgroundColor) {
-                    document.body.style.background = currentBoard.backgroundColor;
-                }
-            }
-
-            // Load cards for this specific board
+            currentBoardId = 'demo-board';
             cards = JSON.parse(localStorage.getItem(`kanbanCards_${currentBoardId}`)) || [];
+            
+            if (cards.length === 0) {
+                // Add demo cards
+                cards = [
+                    {
+                        id: generateId(),
+                        title: 'Welcome to your Kanban Board!',
+                        description: 'This is a demo card. You can edit or delete it.',
+                        column: 'backlog',
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
+                    },
+                    {
+                        id: generateId(),
+                        title: 'Create your first task',
+                        description: 'Click the + Add button to create new cards',
+                        column: 'todo',
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
+                    },
+                    {
+                        id: generateId(),
+                        title: 'Drag cards between columns',
+                        description: 'You can drag and drop cards to different columns',
+                        column: 'doing',
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
+                    },
+                    {
+                        id: generateId(),
+                        title: 'Completed task',
+                        description: 'Great job! This task is done.',
+                        column: 'done',
+                        createdAt: new Date().toISOString(),
+                        updatedAt: new Date().toISOString()
+                    }
+                ];
+                saveCards();
+            }
+            
             renderCards();
             renderColorPicker();
         }
@@ -627,7 +952,7 @@
         // Go back to boards dashboard
         function goBackToBoards() {
             localStorage.removeItem('currentBoardId');
-            window.location.href = 'boards.html';
+            alert('This would normally go back to the boards dashboard');
         }
 
         // Generate unique ID
@@ -644,14 +969,7 @@
 
         // Save board background color
         function saveBoardColor(backgroundColor) {
-            const boards = JSON.parse(localStorage.getItem('kanbanBoards')) || [];
-            const boardIndex = boards.findIndex(board => board.id === currentBoardId);
-
-            if (boardIndex !== -1) {
-                boards[boardIndex].backgroundColor = backgroundColor;
-                boards[boardIndex].updatedAt = new Date().toISOString();
-                localStorage.setItem('kanbanBoards', JSON.stringify(boards));
-            }
+            localStorage.setItem(`boardColor_${currentBoardId}`, backgroundColor);
         }
 
         // Format date
@@ -674,17 +992,17 @@
 
         // Create card HTML
         function createCardHTML(card) {
-            const truncatedDescription = truncateText(card.description || '', 150);
+            const truncatedDescription = truncateText(card.description || '', 120);
 
             return `
-                <div class="card" draggable="true" data-card-id="${card.id}">
+                <div class="card" draggable="true" data-card-id="${card.id}" tabindex="0">
                     <div class="card-content">
                         <div class="card-title">${card.title}</div>
                         <div class="card-description">${truncatedDescription}</div>
                     </div>
                     <div class="card-actions">
-                        <button class="card-action-btn" onclick="editCard('${card.id}')">Edit</button>
-                        <button class="card-action-btn" onclick="deleteCardConfirm('${card.id}')">Delete</button>
+                        <button class="card-action-btn" onclick="editCard('${card.id}')" tabindex="0">Edit</button>
+                        <button class="card-action-btn" onclick="deleteCardConfirm('${card.id}')" tabindex="0">Delete</button>
                     </div>
                     <div class="card-timestamp">${formatDate(card.createdAt)}</div>
                 </div>
@@ -705,13 +1023,25 @@
             document.querySelectorAll('.card').forEach(card => {
                 card.addEventListener('dragstart', handleDragStart);
                 card.addEventListener('dragend', handleDragEnd);
+                
+                // Add keyboard support
+                card.addEventListener('keydown', handleCardKeydown);
             });
 
-            // Add mass delete buttons
+            // Update mass delete buttons
             updateMassDeleteButtons();
         }
 
-        // Show or don't show buttons
+        // Handle keyboard navigation for cards
+        function handleCardKeydown(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                const cardId = this.dataset.cardId;
+                editCard(cardId);
+            }
+        }
+
+        // Show or hide mass delete buttons
         function updateMassDeleteButtons() {
             const columns = ['backlog', 'todo', 'doing', 'done'];
 
@@ -750,9 +1080,19 @@
                 <div class="color-option ${theme.gradient === selectedBackgroundColor ? 'selected' : ''}" 
                      style="background: ${theme.gradient}" 
                      onclick="selectColor('${theme.gradient}')"
-                     title="${theme.name}">
+                     title="${theme.name}"
+                     tabindex="0"
+                     onkeydown="handleColorKeydown(event, '${theme.gradient}')">
                 </div>
             `).join('');
+        }
+
+        // Handle keyboard navigation for color picker
+        function handleColorKeydown(event, gradient) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                selectColor(gradient);
+            }
         }
 
         // Select color theme
@@ -766,23 +1106,21 @@
             document.querySelectorAll('.color-option').forEach(option => {
                 option.classList.remove('selected');
             });
-            event.target.classList.add('selected');
+            document.querySelector(`[style*="${gradient}"]`).classList.add('selected');
         }
 
         // Settings modal functions
         function openSettingsModal() {
-            // Load current board data
-            const boards = JSON.parse(localStorage.getItem('kanbanBoards')) || [];
-            const currentBoard = boards.find(board => board.id === currentBoardId);
-
-            if (currentBoard) {
-                document.getElementById('settingsBoardTitle').value = currentBoard.title;
-                document.getElementById('settingsBoardDescription').value = currentBoard.description || '';
-                selectedBackgroundColor = currentBoard.backgroundColor || colorThemes[0].gradient;
-                renderColorPicker();
-            }
-
+            document.getElementById('settingsBoardTitle').value = 'Demo Kanban Board';
+            document.getElementById('settingsBoardDescription').value = 'A responsive Kanban board for task management';
+            selectedBackgroundColor = document.body.style.background || colorThemes[0].gradient;
+            renderColorPicker();
             document.getElementById('settingsModal').style.display = 'block';
+            
+            // Focus the first input
+            setTimeout(() => {
+                document.getElementById('settingsBoardTitle').focus();
+            }, 100);
         }
 
         function closeSettingsModal() {
@@ -791,17 +1129,10 @@
 
         function deleteBoardFromSettings() {
             if (confirm('Are you sure you want to delete this board?\n\nThis will also delete all cards in this board. This action cannot be undone.')) {
-                // Remove board
-                const boards = JSON.parse(localStorage.getItem('kanbanBoards')) || [];
-                const updatedBoards = boards.filter(b => b.id !== currentBoardId);
-                localStorage.setItem('kanbanBoards', JSON.stringify(updatedBoards));
-
-                // Remove board's cards
                 localStorage.removeItem(`kanbanCards_${currentBoardId}`);
-
-                // Navigate back to dashboard
-                localStorage.removeItem('currentBoardId');
-                window.location.href = 'boards.html';
+                localStorage.removeItem(`boardColor_${currentBoardId}`);
+                alert('Board deleted! In a real app, you would be redirected to the dashboard.');
+                location.reload();
             }
         }
 
@@ -815,6 +1146,11 @@
             document.getElementById('deleteBtn').style.display = 'none';
             document.getElementById('saveBtn').textContent = 'Save Card';
             document.getElementById('cardModal').style.display = 'block';
+            
+            // Focus the title input
+            setTimeout(() => {
+                document.getElementById('cardTitle').focus();
+            }, 100);
         }
 
         function editCard(cardId) {
@@ -829,6 +1165,11 @@
             document.getElementById('deleteBtn').style.display = 'inline-block';
             document.getElementById('saveBtn').textContent = 'Update Card';
             document.getElementById('cardModal').style.display = 'block';
+            
+            // Focus the title input
+            setTimeout(() => {
+                document.getElementById('cardTitle').focus();
+            }, 100);
         }
 
         function closeModal() {
@@ -859,7 +1200,7 @@
             e.preventDefault();
 
             const title = document.getElementById('cardTitle').value.trim();
-            const description = document.getElementById('cardDescription').value.trim().slice(0, 100);
+            const description = document.getElementById('cardDescription').value.trim().slice(0, 500);
         
             if (!title) return;
 
@@ -898,21 +1239,12 @@
 
             if (!title) return;
 
-            // Update board data
-            const boards = JSON.parse(localStorage.getItem('kanbanBoards')) || [];
-            const boardIndex = boards.findIndex(board => board.id === currentBoardId);
-
-            if (boardIndex !== -1) {
-                boards[boardIndex].title = title;
-                boards[boardIndex].description = description;
-                boards[boardIndex].backgroundColor = selectedBackgroundColor;
-                boards[boardIndex].updatedAt = new Date().toISOString();
-                localStorage.setItem('kanbanBoards', JSON.stringify(boards));
-
-                // Update page title and board title
-                document.getElementById('boardTitle').textContent = title;
-                document.title = `${title} - Kanban Board`;
-            }
+            // Update page title and board title
+            document.getElementById('boardTitle').textContent = title;
+            document.title = `${title} - Kanban Board`;
+            
+            // Save background color
+            saveBoardColor(selectedBackgroundColor);
 
             closeSettingsModal();
         });
@@ -973,6 +1305,64 @@
             }
         }
 
+        // Touch events for mobile drag and drop
+        let touchItem = null;
+        let touchOffset = { x: 0, y: 0 };
+
+        document.addEventListener('touchstart', function(e) {
+            const card = e.target.closest('.card');
+            if (card) {
+                touchItem = card;
+                const touch = e.touches[0];
+                const rect = card.getBoundingClientRect();
+                touchOffset.x = touch.clientX - rect.left;
+                touchOffset.y = touch.clientY - rect.top;
+                
+                card.style.position = 'fixed';
+                card.style.zIndex = '1000';
+                card.style.pointerEvents = 'none';
+                card.classList.add('dragging');
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchmove', function(e) {
+            if (touchItem) {
+                e.preventDefault();
+                const touch = e.touches[0];
+                touchItem.style.left = (touch.clientX - touchOffset.x) + 'px';
+                touchItem.style.top = (touch.clientY - touchOffset.y) + 'px';
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchend', function(e) {
+            if (touchItem) {
+                const touch = e.changedTouches[0];
+                const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+                const column = elementBelow ? elementBelow.closest('.column') : null;
+
+                if (column && column.dataset.column) {
+                    const cardId = touchItem.dataset.cardId;
+                    const cardIndex = cards.findIndex(card => card.id === cardId);
+                    if (cardIndex !== -1) {
+                        cards[cardIndex].column = column.dataset.column;
+                        cards[cardIndex].updatedAt = new Date().toISOString();
+                        saveCards();
+                    }
+                }
+
+                // Reset styles
+                touchItem.style.position = '';
+                touchItem.style.zIndex = '';
+                touchItem.style.left = '';
+                touchItem.style.top = '';
+                touchItem.style.pointerEvents = '';
+                touchItem.classList.remove('dragging');
+                touchItem = null;
+                
+                renderCards();
+            }
+        });
+
         // Close modal when clicking outside
         window.addEventListener('click', function (e) {
             const cardModal = document.getElementById('cardModal');
@@ -993,6 +1383,32 @@
                 closeSettingsModal();
             }
         });
+
+        // Handle orientation change
+        window.addEventListener('orientationchange', function() {
+            setTimeout(() => {
+                renderCards();
+            }, 100);
+        });
+
+        // Handle window resize
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                renderCards();
+            }, 250);
+        });
+
+        // Prevent zoom on double tap for iOS
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
 
         // Initialize the app
         initializeBoard();

@@ -21,66 +21,84 @@
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: clamp(15px, 4vw, 20px);
         }
 
+        /* Header - Responsivo */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
+            margin-bottom: clamp(20px, 5vw, 40px);
             max-width: 1200px;
             margin-left: auto;
             margin-right: auto;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            color: white;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: 600;
+            white-space: nowrap;
         }
 
         .user-section {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: clamp(10px, 2vw, 15px);
             background: rgba(255, 255, 255, 0.2);
-            padding: 10px 15px;
+            padding: clamp(8px, 2vw, 10px) clamp(12px, 3vw, 15px);
             border-radius: 12px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s ease;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.3);
+            min-width: 0;
         }
 
         .user-section:hover {
             background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
         .user-avatar {
-            width: 50px;
-            height: 50px;
+            width: clamp(40px, 8vw, 50px);
+            height: clamp(40px, 8vw, 50px);
             background: rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
             border: 2px solid rgba(255, 255, 255, 0.4);
+            flex-shrink: 0;
+        }
+
+        .user-info {
+            min-width: 0;
         }
 
         .user-info h2 {
             color: white;
-            font-size: 1.5rem;
-            font-weight: 300;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            font-weight: 400;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
         }
 
         .user-info p {
             color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            white-space: nowrap;
         }
 
-        .logo {
-            color: white;
-            font-size: 2rem;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
+        /* Seção de Boards - Melhorada */
         .boards-section {
             max-width: 1200px;
             margin: 0 auto;
@@ -90,69 +108,75 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: clamp(20px, 4vw, 30px);
             margin-top: -15px;
-
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .action-button {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            color: white;
-            padding: 12px 16px;
-            /* Slightly larger padding to match workspace card height */
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.2s;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            height: 44px;
-            /* Fixed height to match workspace card */
-        }
-
-        .action-button:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .hidden {
-            display: none;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .section-title {
             color: white;
-            font-size: 1.3rem;
+            font-size: clamp(1.1rem, 3vw, 1.3rem);
             display: flex;
             font-weight: 500;
             align-items: center;
             gap: 10px;
         }
 
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .action-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 16px);
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 44px;
+            white-space: nowrap;
+        }
+
+        .action-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Grid Responsivo Melhorado */
         .boards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+            gap: clamp(15px, 3vw, 20px);
             margin-bottom: 30px;
         }
 
         .board-card {
             border-radius: 12px;
-            padding: 20px;
+            padding: clamp(16px, 4vw, 20px);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
         }
 
         .board-card:hover {
@@ -166,7 +190,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 160px;
+            min-height: 180px;
             background: rgba(255, 255, 255, 0.1);
         }
 
@@ -176,14 +200,15 @@
         }
 
         .create-icon {
-            font-size: 3rem;
+            font-size: clamp(2.5rem, 6vw, 3rem);
             color: rgba(255, 255, 255, 0.7);
             margin-bottom: 10px;
         }
 
         .create-text {
             color: rgba(255, 255, 255, 0.9);
-            font-size: 1.1rem;
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            text-align: center;
         }
 
         .board-header {
@@ -195,23 +220,32 @@
 
         .board-title {
             color: white;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
             margin-bottom: 8px;
             line-height: 1.3;
+            word-wrap: break-word;
+            hyphens: auto;
         }
 
         .board-description {
             color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
+            font-size: clamp(0.85rem, 2vw, 0.9rem);
             line-height: 1.4;
             margin-bottom: 15px;
             min-height: 40px;
+            word-wrap: break-word;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex-grow: 1;
         }
 
         .board-stats {
             display: flex;
-            gap: 15px;
+            gap: clamp(10px, 3vw, 15px);
             margin-bottom: 10px;
+            flex-wrap: wrap;
         }
 
         .stat {
@@ -219,12 +253,14 @@
             align-items: center;
             gap: 5px;
             color: rgba(255, 255, 255, 0.8);
-            font-size: 0.8rem;
+            font-size: clamp(0.75rem, 2vw, 0.8rem);
+            white-space: nowrap;
         }
 
         .board-date {
             color: rgba(255, 255, 255, 0.6);
-            font-size: 0.8rem;
+            font-size: clamp(0.75rem, 2vw, 0.8rem);
+            margin-top: auto;
         }
 
         .board-actions {
@@ -232,7 +268,9 @@
             top: 15px;
             right: 15px;
             opacity: 0;
-            transition: opacity 0.2s;
+            transition: opacity 0.3s ease;
+            display: flex;
+            gap: 5px;
         }
 
         .board-card:hover .board-actions {
@@ -243,27 +281,23 @@
             background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
-            padding: 5px 8px;
+            padding: clamp(4px, 1vw, 5px) clamp(6px, 1.5vw, 8px);
             border-radius: 4px;
             cursor: pointer;
-            margin-left: 5px;
-            transition: background 0.2s;
-            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            font-size: clamp(0.7rem, 1.8vw, 0.8rem);
+            white-space: nowrap;
         }
 
         .action-btn:hover {
             background: rgba(255, 255, 255, 0.3);
         }
 
-        textarea {
-            resize: none;
-        }
-
         .action-btn.delete:hover {
             background: rgba(255, 71, 87, 0.8);
         }
 
-        /* Modal Styles */
+        /* Modal Melhorado */
         .modal {
             display: none;
             position: fixed;
@@ -273,37 +307,45 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            overflow-y: hidden;
+            overflow-y: auto;
             -webkit-overflow-scrolling: touch;
+            padding: clamp(10px, 3vw, 20px);
         }
 
         .modal-content {
             background-color: white;
-            margin: 5% auto;
-            padding: 30px;
+            margin: clamp(20px, 5vh, 5%) auto;
+            padding: clamp(20px, 5vw, 30px);
             border-radius: 12px;
-            width: 90%;
-            max-width: 500px;
+            width: min(95%, 500px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             min-height: fit-content;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: clamp(15px, 4vw, 20px);
+            gap: 15px;
         }
 
         .modal-title {
-            font-size: 1.3rem;
+            font-size: clamp(1.1rem, 3vw, 1.3rem);
             color: #333;
+            word-wrap: break-word;
+            flex: 1;
         }
 
         .close {
             color: #aaa;
-            font-size: 28px;
+            font-size: clamp(24px, 6vw, 28px);
             line-height: 1;
+            cursor: pointer;
+            flex-shrink: 0;
+            padding: 5px;
         }
 
         .close:hover {
@@ -311,22 +353,23 @@
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: clamp(12px, 3vw, 15px);
         }
 
         .form-group label {
             display: block;
             margin-bottom: 5px;
             color: #555;
+            font-size: clamp(0.85rem, 2.2vw, 0.9rem);
         }
 
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 10px;
+            padding: clamp(8px, 2vw, 10px);
             border: 1px solid #ddd;
             border-radius: 5px;
-            font-size: 0.9rem;
+            font-size: clamp(0.85rem, 2.2vw, 0.9rem);
         }
 
         .form-group textarea {
@@ -338,16 +381,23 @@
             display: flex;
             gap: 10px;
             justify-content: flex-end;
-            margin-top: 20px;
+            margin-top: clamp(15px, 4vw, 20px);
+            flex-wrap: wrap;
         }
 
         .btn {
-            padding: 10px 20px;
+            padding: clamp(8px, 2vw, 10px) clamp(15px, 4vw, 20px);
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.2s;
+            font-size: clamp(0.85rem, 2.2vw, 0.9rem);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .btn-primary {
@@ -357,6 +407,7 @@
 
         .btn-primary:hover {
             background: #5a6fd8;
+            transform: translateY(-2px);
         }
 
         .btn-secondary {
@@ -366,6 +417,7 @@
 
         .btn-secondary:hover {
             background: #d0d0d0;
+            transform: translateY(-2px);
         }
 
         .btn-danger {
@@ -375,39 +427,44 @@
 
         .btn-danger:hover {
             background: #ff3838;
+            transform: translateY(-2px);
         }
 
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
+            padding: clamp(40px, 8vw, 60px) clamp(15px, 4vw, 20px);
             color: rgba(255, 255, 255, 0.8);
+            grid-column: 1 / -1;
         }
 
         .empty-state h3 {
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 3.5vw, 1.5rem);
             margin-bottom: 10px;
         }
 
         .empty-state p {
-            font-size: 1rem;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
             margin-bottom: 20px;
         }
 
-        /* Color Picker Styles */
+        /* Color Picker Responsivo */
         .color-picker-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            gap: clamp(10px, 3vw, 15px);
             margin-top: 10px;
+            max-width: 300px;
         }
 
         .color-option {
-            width: 60px;
-            height: 60px;
+            width: 100%;
+            aspect-ratio: 1;
+            min-width: 50px;
+            min-height: 50px;
             border-radius: 12px;
             cursor: pointer;
             border: 3px solid transparent;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             position: relative;
         }
 
@@ -429,15 +486,30 @@
             left: 50%;
             transform: translate(-50%, -50%);
             color: white;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
             text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
         }
 
-        @media (max-width: 768px) {
+        textarea {
+            resize: none;
+        }
+
+        /* Breakpoints para diferentes dispositivos */
+
+        /* Extra Small devices (phones, 480px and down) */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
             .header {
                 flex-direction: column;
-                gap: 20px;
                 text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .user-info h2 {
+                max-width: 150px;
             }
 
             .boards-grid {
@@ -447,38 +519,183 @@
 
             .section-header {
                 flex-direction: column;
-                gap: 15px;
+                align-items: stretch;
                 text-align: center;
+                gap: 15px;
             }
 
             .header-actions {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .action-button {
                 justify-content: center;
             }
 
-            .color-picker-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .action-button {
+                flex: 1;
+                min-width: 120px;
+                justify-content: center;
             }
 
-            /* Mobile modal improvements */
+            .board-actions {
+                position: static;
+                opacity: 1;
+                margin-bottom: 10px;
+                justify-content: flex-end;
+            }
+
             .modal-content {
-                margin: 5% auto;
-                margin-bottom: 20px;
-                width: 95%;
-                padding: 20px;
+                width: 100%;
+                margin: 10px auto;
+                border-radius: 8px;
+                max-height: calc(100vh - 20px);
             }
 
             .modal-actions {
                 flex-direction: column;
+                gap: 10px;
             }
 
             .btn {
                 width: 100%;
-                margin-bottom: 5px;
+                order: 2;
+            }
+
+            .btn-danger {
+                order: 3;
+            }
+
+            .btn-secondary {
+                order: 1;
+            }
+
+            .color-picker-grid {
+                grid-template-columns: repeat(3, 1fr);
+                max-width: 200px;
+                margin: 10px auto;
+            }
+        }
+
+        /* Small devices (tablets, 768px and down) */
+        @media (max-width: 768px) and (min-width: 481px) {
+            .header {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 20px;
+            }
+
+            .boards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .header-actions {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .board-actions {
+                opacity: 1;
+            }
+
+            .modal-actions {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .color-picker-grid {
+                grid-template-columns: repeat(3, 1fr);
+                justify-content: center;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        /* Medium devices (small laptops, 992px and down) */
+        @media (max-width: 992px) and (min-width: 769px) {
+            .boards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            }
+        }
+
+        /* Large devices (desktops, 1200px and up) */
+        @media (min-width: 1200px) {
+            .boards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+
+        /* Landscape orientation adjustments */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .modal-content {
+                margin: 2vh auto;
+                max-height: 96vh;
+            }
+
+            .empty-state {
+                padding: 30px 20px;
+            }
+        }
+
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .board-card {
+                backdrop-filter: blur(15px);
+            }
+
+            .user-section {
+                backdrop-filter: blur(15px);
+            }
+
+            .action-button {
+                backdrop-filter: blur(15px);
+            }
+        }
+
+        /* Focus states para acessibilidade */
+        .action-button:focus,
+        .btn:focus,
+        .action-btn:focus {
+            outline: 2px solid rgba(255, 255, 255, 0.8);
+            outline-offset: 2px;
+        }
+
+        .board-card:focus {
+            outline: 2px solid rgba(255, 255, 255, 0.6);
+            outline-offset: 2px;
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Touch improvements */
+        @media (hover: none) and (pointer: coarse) {
+            .board-actions {
+                opacity: 1;
+            }
+
+            .action-button,
+            .btn,
+            .action-btn {
+                min-height: 48px;
+            }
+
+            .color-option {
+                min-height: 60px;
+                min-width: 60px;
+            }
+        }
+
+        /* Reduced motion para acessibilidade */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
         }
     </style>
@@ -562,12 +779,12 @@
                 </div>
                 <div class="form-group">
                     <label>Workspace Management</label>
-                    <div style="display: flex; gap: 10px; margin-top: 10px;">
-                        <button type="button" class="btn btn-secondary" onclick="exportBoards()" style="flex: 1;">
+                    <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                        <button type="button" class="btn btn-secondary" onclick="exportBoards()" style="flex: 1; min-width: 120px;">
                             <i class="fa-solid fa-file-arrow-down"></i>
                             Export Boards
                         </button>
-                        <button type="button" class="btn btn-secondary" onclick="triggerImport()" style="flex: 1;">
+                        <button type="button" class="btn btn-secondary" onclick="triggerImport()" style="flex: 1; min-width: 120px;">
                             <i class="fa-solid fa-file-import"></i>
                             Import Boards
                         </button>
@@ -1045,9 +1262,139 @@
             }
         });
 
+        // Touch event handling for better mobile experience
+        let touchStartY = 0;
+        let touchStartTime = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            touchStartY = e.touches[0].clientY;
+            touchStartTime = Date.now();
+        }, { passive: true });
+
+        document.addEventListener('touchend', function(e) {
+            const touchEndY = e.changedTouches[0].clientY;
+            const touchDuration = Date.now() - touchStartTime;
+            const touchDistance = Math.abs(touchEndY - touchStartY);
+            
+            // If it's a quick tap (not a scroll), ensure hover states work properly
+            if (touchDuration < 200 && touchDistance < 10) {
+                const target = e.target.closest('.board-card, .action-button, .btn');
+                if (target) {
+                    target.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        target.style.transform = '';
+                    }, 150);
+                }
+            }
+        }, { passive: true });
+
+        // Handle window resize for dynamic adjustments
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(function() {
+                // Recalculate modal positioning if open
+                const activeModal = document.querySelector('.modal[style*="block"]');
+                if (activeModal) {
+                    const modalContent = activeModal.querySelector('.modal-content');
+                    modalContent.style.maxHeight = (window.innerHeight * 0.9) + 'px';
+                }
+            }, 250);
+        });
+
+        // Intersection Observer for smooth animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Initialize animations for boards
+        function initializeAnimations() {
+            const boardCards = document.querySelectorAll('.board-card');
+            boardCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = `opacity 0.5s ease ${index * 0.1}s, transform 0.5s ease ${index * 0.1}s`;
+                observer.observe(card);
+            });
+        }
+
+        // Enhanced render function with animations
+        function renderBoardsWithAnimation() {
+            renderBoards();
+            setTimeout(initializeAnimations, 100);
+        }
+
         // Initialize the app
         initializeWorkspace();
-        renderBoards();
+        renderBoardsWithAnimation();
+
+        // Add sample boards for demonstration (only if no boards exist)
+        if (boards.length === 0) {
+            const sampleBoards = [
+                {
+                    id: generateId(),
+                    title: "Personal Tasks",
+                    description: "Track your daily personal tasks and goals",
+                    backgroundColor: colorThemes[0].gradient,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    title: "Work Project",
+                    description: "Manage work-related tasks and deadlines",
+                    backgroundColor: colorThemes[1].gradient,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                }
+            ];
+
+            // Add sample cards to the first board
+            const sampleCards = [
+                {
+                    id: generateId(),
+                    title: "Review project requirements",
+                    description: "Go through all project requirements and create action items",
+                    column: "todo",
+                    priority: "high",
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    title: "Setup development environment",
+                    description: "Install necessary tools and configure workspace",
+                    column: "doing",
+                    priority: "medium",
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: generateId(),
+                    title: "Research competitor solutions",
+                    description: "Analyze what competitors are doing in this space",
+                    column: "done",
+                    priority: "low",
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                }
+            ];
+
+            boards = sampleBoards;
+            localStorage.setItem(`kanbanCards_${sampleBoards[0].id}`, JSON.stringify(sampleCards));
+            saveBoards();
+            renderBoardsWithAnimation();
+        }
     </script>
 </body>
 
