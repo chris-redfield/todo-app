@@ -662,13 +662,22 @@
             });
         }
 
+        // Truncate text to specified length
+        function truncateText(text, maxLength) {
+            if (!text) return '';
+            if (text.length <= maxLength) return text;
+            return text.substring(0, maxLength) + '...';
+        }
+
         // Create card HTML
         function createCardHTML(card) {
+            const truncatedDescription = truncateText(card.description || '', 100);
+
             return `
                 <div class="card" draggable="true" data-card-id="${card.id}">
                     <div class="card-content">
                         <div class="card-title">${card.title}</div>
-                        <div class="card-description">${card.description || ''}</div>
+                        <div class="card-description">${truncatedDescription}</div>
                     </div>
                     <div class="card-actions">
                         <button class="card-action-btn" onclick="editCard('${card.id}')">Edit</button>
