@@ -211,10 +211,7 @@
             min-height: 18px;
             word-wrap: break-word;
             overflow-wrap: break-word;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 4;
-            -webkit-box-orient: vertical;
+            white-space: pre-wrap;
         }
 
         .card-actions {
@@ -321,7 +318,7 @@
 
         .form-group textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 160px;
             resize: none;
         }
 
@@ -665,22 +662,13 @@
             });
         }
 
-        // Truncate text to specified length
-        function truncateText(text, maxLength) {
-            if (!text) return '';
-            if (text.length <= maxLength) return text;
-            return text.substring(0, maxLength) + '...';
-        }
-
         // Create card HTML
         function createCardHTML(card) {
-            const truncatedDescription = truncateText(card.description || '', 150);
-
             return `
                 <div class="card" draggable="true" data-card-id="${card.id}">
                     <div class="card-content">
                         <div class="card-title">${card.title}</div>
-                        <div class="card-description">${truncatedDescription}</div>
+                        <div class="card-description">${card.description || ''}</div>
                     </div>
                     <div class="card-actions">
                         <button class="card-action-btn" onclick="editCard('${card.id}')">Edit</button>
@@ -859,7 +847,7 @@
             e.preventDefault();
 
             const title = document.getElementById('cardTitle').value.trim();
-            const description = document.getElementById('cardDescription').value.trim().slice(0, 100);
+            const description = document.getElementById('cardDescription').value.trim();
         
             if (!title) return;
 
