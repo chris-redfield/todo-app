@@ -176,6 +176,12 @@
             box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
         }
 
+        /* Done rail's button completes the column instead of deleting it */
+        .mass-complete-btn:hover {
+            background: rgba(12, 163, 12, 0.4);
+            box-shadow: 0 4px 12px rgba(12, 163, 12, 0.2);
+        }
+
         .cards-container {
             padding: 10px 0;
         }
@@ -498,7 +504,7 @@
             padding: 14px 10px;
             cursor: pointer;
             backdrop-filter: blur(10px);
-            transition: background 0.2s, right 0.3s ease;
+            transition: background 0.2s, opacity 0.2s ease;
             box-shadow: -2px 0 12px rgba(0, 0, 0, 0.15);
         }
 
@@ -506,18 +512,16 @@
             background: rgba(255, 255, 255, 0.35);
         }
 
+        /* While the completed screen is up, hide the edge tab (the transparent
+           screen would otherwise let it show through — and Back to Board covers it) */
         .drawer-toggle.open {
-            right: min(420px, 100%);
+            opacity: 0;
+            pointer-events: none;
         }
 
         .drawer-toggle-arrow {
             font-size: 1.4rem;
             line-height: 1;
-            transition: transform 0.3s ease;
-        }
-
-        .drawer-toggle.open .drawer-toggle-arrow {
-            transform: rotate(180deg);
         }
 
         .drawer-toggle-label {
@@ -546,7 +550,7 @@
             inset: 0;
             width: 100%;
             height: 100%;
-            background: #fcfcfb;
+            background: transparent;
             overflow-y: auto;
             transform: translateX(100%);
             transition: transform 0.35s ease;
@@ -574,7 +578,8 @@
 
         .drawer-title {
             font-size: 1.5rem;
-            color: #0b0b0b;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
             margin: 0;
             flex: 1;
             text-align: center;
@@ -809,8 +814,8 @@
                 <button class="add-card-btn" onclick="openAddCardModal('done')">+ Add Card</button>
             </div>
             <div class="cards-container" id="done-cards"></div>
-            <button class="mass-delete-btn" id="done-mass-delete" onclick="massDeleteCards('done')"
-                title="Delete all cards in this column">🔥</button>
+            <button class="mass-delete-btn mass-complete-btn" id="done-mass-delete" onclick="completeAllCards('done')"
+                title="Complete all cards in this column">✅</button>
         </div>
     </div>
     </div>
@@ -1080,6 +1085,27 @@
 
             if (confirm(confirmMessage)) {
                 cards = cards.filter(card => !(card.column === column && !card.completed));
+                saveCards();
+                renderCards();
+            }
+        }
+
+        // Mark every (non-completed) card in a column as completed at once
+        function completeAllCards(column) {
+            const columnCards = cards.filter(card => card.column === column && !card.completed);
+
+            if (columnCards.length === 0) return;
+
+            const confirmMessage = `Mark ALL ${columnCards.length} card(s) in the ${column.toUpperCase()} column as completed?\n\nThey'll move to the Completed dashboard.`;
+
+            if (confirm(confirmMessage)) {
+                const now = new Date().toISOString();
+                cards.forEach(card => {
+                    if (card.column === column && !card.completed) {
+                        card.completed = true;
+                        card.completedAt = now;
+                    }
+                });
                 saveCards();
                 renderCards();
             }
