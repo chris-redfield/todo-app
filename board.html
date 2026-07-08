@@ -707,6 +707,60 @@
             padding: 20px 0;
         }
 
+        /* SVG line / stacked-area charts */
+        .viz-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .viz-grid {
+            stroke: #e1e0d9;
+            stroke-width: 1;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .viz-baseline {
+            stroke: var(--baseline);
+            stroke-width: 1;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .viz-axis-label {
+            fill: var(--text-muted);
+            font-size: 9px;
+            font-family: inherit;
+        }
+
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .chart-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .chart-legend-swatch {
+            width: 12px;
+            height: 12px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .chart-note {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+
         /* Completed task grid — scales to many cards */
         .completed-grid {
             display: grid;
@@ -899,6 +953,7 @@
             </div>
             <div class="metrics-grid" id="completedMetrics"></div>
             <div class="chart-wrap viz-root" id="completionsChart"></div>
+            <div class="chart-wrap viz-root" id="cfdChart"></div>
             <div class="completed-grid" id="completedList"></div>
         </div>
     </section>
@@ -1303,6 +1358,7 @@
 
             renderCompletedMetrics(completed);
             renderCompletionsChart(completed);
+            renderCFDChart();
             renderCompletedList(completed);
         }
 
@@ -1404,6 +1460,153 @@
             chartEl.innerHTML = `
                 <div class="chart-title">Completions · last ${DAYS} days</div>
                 <div class="chart-bars">${bars}</div>
+            `;
+        }
+
+        // ---- Cumulative-flow chart (SVG helpers) ------------------------------
+
+        const CHART_GEO = { W: 680, H: 220, padL: 34, padR: 12, padT: 12, padB: 26 };
+
+        // Day-floored timestamp for a date/ISO value
+        function dayFloor(value) {
+            const d = new Date(value);
+            d.setHours(0, 0, 0, 0);
+            return d.getTime();
+        }
+
+        // A daily date axis from the earliest card creation to today (capped to 60 days)
+        function buildDailyAxis() {
+            const created = cards.map(c => new Date(c.createdAt)).filter(d => !isNaN(d));
+            if (!created.length) return [];
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            let start = new Date(Math.min(...created.map(d => d.getTime())));
+            start.setHours(0, 0, 0, 0);
+
+            // Guarantee a readable minimum window (14 days) so same-day / recent-only
+            // data still has width to plot instead of collapsing to a point.
+            const MIN = 13;
+            const minStart = new Date(today);
+            minStart.setDate(today.getDate() - MIN);
+            if (start > minStart) start = minStart;
+
+            const MAX = 60;
+            if (Math.round((today - start) / 86400000) > MAX) {
+                start = new Date(today);
+                start.setDate(today.getDate() - MAX);
+            }
+
+            const axis = [];
+            for (let d = new Date(start); d <= today; d.setDate(d.getDate() + 1)) {
+                axis.push(new Date(d));
+            }
+            return axis;
+        }
+
+        function chartCoords(n, maxY) {
+            const g = CHART_GEO;
+            const plotW = g.W - g.padL - g.padR;
+            const plotH = g.H - g.padT - g.padB;
+            const X = i => (n > 1 ? g.padL + (i / (n - 1)) * plotW : g.padL + plotW / 2);
+            const Y = v => g.padT + plotH - (maxY > 0 ? (v / maxY) : 0) * plotH;
+            return { X, Y, plotW, plotH, g };
+        }
+
+        // Gridlines, y-axis ticks, x-axis date labels, baseline
+        function chartAxes(axis, maxY) {
+            const { X, Y, plotW, g } = chartCoords(axis.length, maxY);
+            const steps = 4;
+            let out = '';
+
+            for (let i = 0; i <= steps; i++) {
+                const val = maxY * i / steps;
+                const y = Y(val);
+                out += `<line x1="${g.padL}" y1="${y.toFixed(1)}" x2="${g.padL + plotW}" y2="${y.toFixed(1)}" class="viz-grid"/>`;
+                out += `<text x="${g.padL - 6}" y="${(y + 3).toFixed(1)}" text-anchor="end" class="viz-axis-label">${Math.round(val)}</text>`;
+            }
+
+            const n = axis.length;
+            const labelCount = Math.min(6, n);
+            for (let k = 0; k < labelCount; k++) {
+                const i = labelCount > 1 ? Math.round(k * (n - 1) / (labelCount - 1)) : 0;
+                const lab = axis[i].toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                out += `<text x="${X(i).toFixed(1)}" y="${g.H - 8}" text-anchor="middle" class="viz-axis-label">${lab}</text>`;
+            }
+
+            const baseY = Y(0);
+            out += `<line x1="${g.padL}" y1="${baseY.toFixed(1)}" x2="${g.padL + plotW}" y2="${baseY.toFixed(1)}" class="viz-baseline"/>`;
+            return out;
+        }
+
+        function svgWrap(body) {
+            const g = CHART_GEO;
+            return `<svg viewBox="0 0 ${g.W} ${g.H}" class="viz-svg" role="img">${body}</svg>`;
+        }
+
+        function legendHTML(items) {
+            return `<div class="chart-legend">` + items.map(it =>
+                `<span class="chart-legend-item"><span class="chart-legend-swatch" style="background:${it.color}"></span>${it.label}</span>`
+            ).join('') + `</div>`;
+        }
+
+        function emptyChart(title, msg) {
+            return `<div class="chart-title">${title}</div><div class="chart-empty">${msg}</div>`;
+        }
+
+        // Stacked-area chart; bands stack bottom→top: [{values, color}]
+        function stackedAreaSVG(axis, bands, maxY) {
+            const { X, Y } = chartCoords(axis.length, maxY);
+            let body = chartAxes(axis, maxY);
+            let lower = new Array(axis.length).fill(0);
+
+            bands.forEach(b => {
+                const upper = lower.map((lo, i) => lo + b.values[i]);
+                const top = upper.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' ');
+                const bot = lower.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).reverse().join(' ');
+                body += `<polygon points="${top} ${bot}" fill="${b.color}" opacity="0.85"/>`;
+                // 2px surface-colored separator on the top edge of the band
+                body += `<polyline points="${top}" fill="none" stroke="var(--surface-1)" stroke-width="2" vector-effect="non-scaling-stroke"/>`;
+                lower = upper;
+            });
+            return svgWrap(body);
+        }
+
+        // Cumulative flow: task counts by state (Open vs Completed) over time
+        function renderCFDChart() {
+            const el = document.getElementById('cfdChart');
+            const axis = buildDailyAxis();
+            const valid = cards.filter(c => c.createdAt && !isNaN(new Date(c.createdAt)));
+
+            if (!axis.length || !valid.length) {
+                el.innerHTML = emptyChart('Cumulative flow', 'No tasks yet.');
+                return;
+            }
+
+            const doneArr = [];
+            const openArr = [];
+            axis.forEach(day => {
+                const t = day.getTime();
+                let dn = 0, op = 0;
+                valid.forEach(c => {
+                    const created = dayFloor(c.createdAt) <= t;
+                    const completed = c.completed && c.completedAt && dayFloor(c.completedAt) <= t;
+                    if (completed) dn++;
+                    else if (created) op++;
+                });
+                doneArr.push(dn);
+                openArr.push(op);
+            });
+
+            const maxY = Math.max(1, ...doneArr.map((d, i) => d + openArr[i]));
+            el.innerHTML = `
+                <div class="chart-title">Cumulative flow · tasks by state</div>
+                ${legendHTML([{ label: 'Completed', color: '#008300' }, { label: 'Open', color: '#2a78d6' }])}
+                ${stackedAreaSVG(axis, [
+                    { values: doneArr, color: '#008300' },
+                    { values: openArr, color: '#2a78d6' }
+                ], maxY)}
+                <div class="chart-note">Reconstructed from creation &amp; completion dates only — per-column history isn't tracked, so this shows Open vs Completed.</div>
             `;
         }
 
