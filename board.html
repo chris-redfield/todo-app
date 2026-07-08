@@ -21,8 +21,20 @@
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            overflow-x: hidden;
             transition: background 0.3s ease;
+        }
+
+        /* The board content lives on its own full-width "screen" so it can pan
+           left as the completed screen pans in from the right. */
+        .board-screen {
+            padding: 20px;
+            transition: transform 0.35s ease;
+            will-change: transform;
+        }
+
+        .board-screen.shifted {
+            transform: translateX(-100%);
         }
 
         .header {
@@ -446,11 +458,310 @@
                 width: 100%;
                 margin-bottom: 5px;
             }
+
+            .metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .drawer-title {
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Complete action on Done cards */
+        .card-action-complete {
+            color: #0ca30c;
+            font-weight: 600;
+        }
+
+        .card-action-complete:hover {
+            background: #e8f7e8;
+            color: #0a8a0a;
+        }
+
+        /* ---- Completed tasks drawer ---- */
+        .drawer-toggle {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            z-index: 900;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-right: none;
+            border-radius: 10px 0 0 10px;
+            color: white;
+            padding: 14px 10px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: background 0.2s, right 0.3s ease;
+            box-shadow: -2px 0 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .drawer-toggle:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .drawer-toggle.open {
+            right: min(420px, 100%);
+        }
+
+        .drawer-toggle-arrow {
+            font-size: 1.4rem;
+            line-height: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .drawer-toggle.open .drawer-toggle-arrow {
+            transform: rotate(180deg);
+        }
+
+        .drawer-toggle-label {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+        }
+
+        .drawer-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 5px;
+            border-radius: 10px;
+            background: #0ca30c;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .completed-screen {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background: #fcfcfb;
+            overflow-y: auto;
+            transform: translateX(100%);
+            transition: transform 0.35s ease;
+            z-index: 950;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .completed-screen.open {
+            transform: translateX(0);
+        }
+
+        .completed-screen-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 24px 60px;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .drawer-title {
+            font-size: 1.5rem;
+            color: #0b0b0b;
+            margin: 0;
+            flex: 1;
+            text-align: center;
+        }
+
+        /* A non-absolute version of the back button for use inside the header flow */
+        .back-btn-static {
+            position: static;
+            transform: none;
+            background: #f0efec;
+            color: #0b0b0b;
+            border: 1px solid #e1e0d9;
+            white-space: nowrap;
+        }
+
+        .back-btn-static:hover {
+            background: #e1e0d9;
+        }
+
+        /* Metrics tiles */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .metric-tile {
+            background: #f9f9f7;
+            border: 1px solid #e1e0d9;
+            border-radius: 10px;
+            padding: 14px;
+        }
+
+        .metric-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #0b0b0b;
+            line-height: 1.2;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: #52514e;
+            margin-top: 4px;
+        }
+
+        /* Completions chart (single-series bar) */
+        .viz-root {
+            --surface-1: #fcfcfb;
+            --text-primary: #0b0b0b;
+            --text-secondary: #52514e;
+            --text-muted: #898781;
+            --baseline: #c3c2b7;
+            --series-1: #667eea;
+        }
+
+        .chart-wrap {
+            background: var(--surface-1);
+            border: 1px solid #e1e0d9;
+            border-radius: 10px;
+            padding: 16px 14px 10px;
+            margin-bottom: 24px;
+        }
+
+        .chart-title {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 14px;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            height: 120px;
+            border-bottom: 1px solid var(--baseline);
+        }
+
+        .chart-bar-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+        }
+
+        .chart-bar-track {
+            position: relative;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .chart-bar {
+            width: 100%;
+            max-width: 18px;
+            background: var(--series-1);
+            border-radius: 4px 4px 0 0;
+            transition: height 0.3s ease;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -16px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .chart-bar-label {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            margin-top: 5px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .chart-empty {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        /* Completed task grid — scales to many cards */
+        .completed-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .completed-item {
+            border: 1px solid #e1e0d9;
+            border-radius: 10px;
+            padding: 14px;
+            background: #fcfcfb;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .completed-item-title {
+            color: #0b0b0b;
+            font-weight: 600;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .completed-item-desc {
+            color: #52514e;
+            font-size: 0.85rem;
+            margin-top: 4px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .completed-item-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 0.75rem;
+            color: #898781;
+            margin-top: 8px;
+        }
+
+        .completed-item-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: auto;
+            padding-top: 10px;
+        }
+
+        .completed-empty {
+            grid-column: 1 / -1;
+            color: #898781;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 30px 10px;
+            line-height: 1.6;
         }
     </style>
 </head>
 
 <body>
+    <div class="board-screen" id="boardScreen">
     <div class="header">
         <div class="header-content">
             <button class="back-btn" onclick="goBackToBoards()" title="Back to Boards">← Boards</button>
@@ -502,6 +813,8 @@
                 title="Delete all cards in this column">🔥</button>
         </div>
     </div>
+    </div>
+    <!-- /board-screen -->
 
     <!-- Add/Edit Card Modal -->
     <div id="cardModal" class="modal">
@@ -561,6 +874,29 @@
             </form>
         </div>
     </div>
+
+    <!-- Edge tab that navigates to the full-screen completed view -->
+    <button class="drawer-toggle" id="drawerToggle" onclick="toggleCompletedScreen()"
+        title="Completed tasks & metrics" aria-label="Open completed tasks">
+        <span class="drawer-toggle-arrow">›</span>
+        <span class="drawer-toggle-label">Completed</span>
+        <span class="drawer-badge" id="drawerBadge" style="display: none;">0</span>
+    </button>
+
+    <!-- Full-screen completed view: slides in from the right -->
+    <section class="completed-screen" id="completedScreen" aria-label="Completed tasks">
+        <div class="completed-screen-inner">
+            <div class="drawer-header">
+                <button class="back-btn back-btn-static" onclick="toggleCompletedScreen()"
+                    title="Back to board">← Back to Board</button>
+                <h2 class="drawer-title">✓ Completed Tasks</h2>
+                <span></span>
+            </div>
+            <div class="metrics-grid" id="completedMetrics"></div>
+            <div class="chart-wrap viz-root" id="completionsChart"></div>
+            <div class="completed-grid" id="completedList"></div>
+        </div>
+    </section>
 
     <script>
         // Global variables
@@ -673,6 +1009,11 @@
         function createCardHTML(card) {
             const truncatedDescription = truncateText(card.description || '', 100);
 
+            // The Complete action is only offered once a card reaches the Done column
+            const completeBtn = card.column === 'done'
+                ? `<button class="card-action-btn card-action-complete" onclick="completeCard('${card.id}')">✓ Complete</button>`
+                : '';
+
             return `
                 <div class="card" draggable="true" data-card-id="${card.id}">
                     <div class="card-content">
@@ -682,6 +1023,7 @@
                     <div class="card-actions">
                         <button class="card-action-btn" onclick="editCard('${card.id}')">Edit</button>
                         <button class="card-action-btn" onclick="deleteCardConfirm('${card.id}')">Delete</button>
+                        ${completeBtn}
                     </div>
                     <div class="card-timestamp">${formatDate(card.createdAt)}</div>
                 </div>
@@ -694,7 +1036,8 @@
 
             columns.forEach(column => {
                 const container = document.getElementById(`${column}-cards`);
-                const columnCards = cards.filter(card => card.column === column);
+                // Completed cards leave the board entirely — they live in the drawer
+                const columnCards = cards.filter(card => card.column === column && !card.completed);
                 container.innerHTML = columnCards.map(createCardHTML).join('');
             });
 
@@ -706,6 +1049,9 @@
 
             // Add mass delete buttons
             updateMassDeleteButtons();
+
+            // Keep the completed-tasks drawer in sync
+            renderCompletedPanel();
         }
 
         // Show or don't show buttons
@@ -713,7 +1059,7 @@
             const columns = ['backlog', 'todo', 'doing', 'done'];
 
             columns.forEach(column => {
-                const columnCards = cards.filter(card => card.column === column);
+                const columnCards = cards.filter(card => card.column === column && !card.completed);
                 const massDeleteBtn = document.getElementById(`${column}-mass-delete`);
 
                 if (columnCards.length > 0) {
@@ -724,16 +1070,16 @@
             });
         }
 
-        // Mass delete all cards in a specific column
+        // Mass delete all cards in a specific column (completed/archived cards are left untouched)
         function massDeleteCards(column) {
-            const columnCards = cards.filter(card => card.column === column);
+            const columnCards = cards.filter(card => card.column === column && !card.completed);
 
             if (columnCards.length === 0) return;
 
             const confirmMessage = `Are you sure you want to delete ALL ${columnCards.length} card(s) in the ${column.toUpperCase()} column?\n\nThis action cannot be undone.`;
 
             if (confirm(confirmMessage)) {
-                cards = cards.filter(card => card.column !== column);
+                cards = cards.filter(card => !(card.column === column && !card.completed));
                 saveCards();
                 renderCards();
             }
@@ -849,6 +1195,214 @@
                 saveCards();
                 renderCards();
             }
+        }
+
+        // ---- Completed tasks ----------------------------------------------------
+
+        // Mark a card as completed: it leaves the board and is archived in the drawer
+        function completeCard(cardId) {
+            const card = cards.find(c => c.id === cardId);
+            if (!card) return;
+
+            card.completed = true;
+            card.completedAt = new Date().toISOString();
+            saveCards();
+            renderCards();
+        }
+
+        // Send a completed card back to the Done column
+        function restoreCard(cardId) {
+            const card = cards.find(c => c.id === cardId);
+            if (!card) return;
+
+            card.completed = false;
+            delete card.completedAt;
+            card.column = 'done';
+            card.updatedAt = new Date().toISOString();
+            saveCards();
+            renderCards();
+        }
+
+        // Permanently delete a completed card
+        function deleteCompletedCard(cardId) {
+            if (confirm('Permanently delete this completed task? This cannot be undone.')) {
+                cards = cards.filter(card => card.id !== cardId);
+                saveCards();
+                renderCards();
+            }
+        }
+
+        // Pan rightward to the completed view: the board slides out to the left
+        // while the completed screen slides in from the right, as one continuous strip.
+        function toggleCompletedScreen() {
+            const screen = document.getElementById('completedScreen');
+            const isOpen = screen.classList.toggle('open');
+            document.getElementById('boardScreen').classList.toggle('shifted', isOpen);
+            document.getElementById('drawerToggle').classList.toggle('open', isOpen);
+            // Avoid a second scrollbar while the completed screen (its own scroller) is up
+            document.body.style.overflow = isOpen ? 'hidden' : '';
+            if (isOpen) renderCompletedPanel();
+        }
+
+        // Human-readable duration between two ISO timestamps
+        function formatDuration(fromISO, toISO) {
+            const ms = new Date(toISO) - new Date(fromISO);
+            if (isNaN(ms) || ms < 0) return '—';
+
+            const minutes = Math.floor(ms / 60000);
+            if (minutes < 1) return 'less than a minute';
+            if (minutes < 60) return `${minutes} min`;
+
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) {
+                const rem = minutes % 60;
+                return rem ? `${hours}h ${rem}m` : `${hours}h`;
+            }
+
+            const days = Math.floor(hours / 24);
+            const remHours = hours % 24;
+            return remHours ? `${days}d ${remHours}h` : `${days}d`;
+        }
+
+        // Render the drawer: metrics header, completions chart, and the task list
+        function renderCompletedPanel() {
+            const completed = cards
+                .filter(card => card.completed && card.completedAt)
+                .sort((a, b) => new Date(b.completedAt) - new Date(a.completedAt));
+
+            // Toggle tab badge
+            const badge = document.getElementById('drawerBadge');
+            badge.textContent = completed.length;
+            badge.style.display = completed.length ? 'flex' : 'none';
+
+            renderCompletedMetrics(completed);
+            renderCompletionsChart(completed);
+            renderCompletedList(completed);
+        }
+
+        function renderCompletedMetrics(completed) {
+            const metricsEl = document.getElementById('completedMetrics');
+
+            if (completed.length === 0) {
+                metricsEl.innerHTML = '';
+                return;
+            }
+
+            // Durations in ms (guard against malformed / missing createdAt)
+            const durations = completed
+                .map(c => new Date(c.completedAt) - new Date(c.createdAt))
+                .filter(ms => !isNaN(ms) && ms >= 0);
+
+            const avgMs = durations.length
+                ? durations.reduce((a, b) => a + b, 0) / durations.length
+                : 0;
+
+            const fastest = completed.reduce((best, c) => {
+                const ms = new Date(c.completedAt) - new Date(c.createdAt);
+                return (isNaN(ms) || ms < 0) ? best : (!best || ms < best.ms ? { card: c, ms } : best);
+            }, null);
+            const slowest = completed.reduce((worst, c) => {
+                const ms = new Date(c.completedAt) - new Date(c.createdAt);
+                return (isNaN(ms) || ms < 0) ? worst : (!worst || ms > worst.ms ? { card: c, ms } : worst);
+            }, null);
+
+            const msToLabel = (ms) => formatDuration(new Date(0).toISOString(), new Date(ms).toISOString());
+
+            metricsEl.innerHTML = `
+                <div class="metric-tile">
+                    <div class="metric-value">${completed.length}</div>
+                    <div class="metric-label">Total completed</div>
+                </div>
+                <div class="metric-tile">
+                    <div class="metric-value">${msToLabel(avgMs)}</div>
+                    <div class="metric-label">Avg. time to complete</div>
+                </div>
+                <div class="metric-tile">
+                    <div class="metric-value">${fastest ? msToLabel(fastest.ms) : '—'}</div>
+                    <div class="metric-label">Fastest${fastest ? ` · ${truncateText(fastest.card.title, 20)}` : ''}</div>
+                </div>
+                <div class="metric-tile">
+                    <div class="metric-value">${slowest ? msToLabel(slowest.ms) : '—'}</div>
+                    <div class="metric-label">Slowest${slowest ? ` · ${truncateText(slowest.card.title, 20)}` : ''}</div>
+                </div>
+            `;
+        }
+
+        // Bar chart: completions per day over the last 14 days (single series)
+        function renderCompletionsChart(completed) {
+            const chartEl = document.getElementById('completionsChart');
+
+            if (completed.length === 0) {
+                chartEl.innerHTML = '<div class="chart-empty">No completions yet.</div>';
+                return;
+            }
+
+            const DAYS = 14;
+            // Build a day-keyed bucket for the trailing window, ending today
+            const buckets = [];
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            for (let i = DAYS - 1; i >= 0; i--) {
+                const d = new Date(today);
+                d.setDate(today.getDate() - i);
+                buckets.push({ date: d, count: 0 });
+            }
+
+            completed.forEach(c => {
+                const cd = new Date(c.completedAt);
+                cd.setHours(0, 0, 0, 0);
+                const bucket = buckets.find(b => b.date.getTime() === cd.getTime());
+                if (bucket) bucket.count++;
+            });
+
+            const maxCount = Math.max(1, ...buckets.map(b => b.count));
+
+            // Recessive y-reference (max) + baseline via CSS; bars anchored to baseline.
+            const bars = buckets.map(b => {
+                const pct = (b.count / maxCount) * 100;
+                const dayLabel = b.date.toLocaleDateString('en-US', { day: 'numeric' });
+                const full = b.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                const valueLabel = b.count > 0 ? `<span class="bar-value">${b.count}</span>` : '';
+                return `
+                    <div class="chart-bar-col" title="${full}: ${b.count} completed">
+                        <div class="chart-bar-track">
+                            ${valueLabel}
+                            <div class="chart-bar" style="height: ${b.count ? Math.max(pct, 4) : 0}%"></div>
+                        </div>
+                        <div class="chart-bar-label">${dayLabel}</div>
+                    </div>
+                `;
+            }).join('');
+
+            chartEl.innerHTML = `
+                <div class="chart-title">Completions · last ${DAYS} days</div>
+                <div class="chart-bars">${bars}</div>
+            `;
+        }
+
+        function renderCompletedList(completed) {
+            const listEl = document.getElementById('completedList');
+
+            if (completed.length === 0) {
+                listEl.innerHTML = '<div class="completed-empty">Completed tasks will appear here.<br>Finish a card in the Done column to get started.</div>';
+                return;
+            }
+
+            listEl.innerHTML = completed.map(card => `
+                <div class="completed-item">
+                    <div class="completed-item-title">${card.title}</div>
+                    ${card.description ? `<div class="completed-item-desc">${truncateText(card.description, 100)}</div>` : ''}
+                    <div class="completed-item-meta">
+                        <span title="Time from creation to completion">⏱ ${formatDuration(card.createdAt, card.completedAt)}</span>
+                        <span>✓ ${formatDate(card.completedAt)}</span>
+                    </div>
+                    <div class="completed-item-actions">
+                        <button class="card-action-btn" onclick="restoreCard('${card.id}')">↩ Restore</button>
+                        <button class="card-action-btn" onclick="deleteCompletedCard('${card.id}')">Delete</button>
+                    </div>
+                </div>
+            `).join('');
         }
 
         // Form submission for cards
