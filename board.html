@@ -266,6 +266,16 @@
             border: 2px dashed rgba(255, 255, 255, 0.5);
         }
 
+        /* Line showing where a dragged card will land */
+        .drop-indicator {
+            height: 3px;
+            margin-bottom: 10px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+        }
+
         /* Modal Styles */
         .modal {
             display: none;
@@ -1698,6 +1708,33 @@
         });
 
         // Drag and drop functionality
+        let dropIndicator = null;
+
+        function getDropIndicator() {
+            if (!dropIndicator) {
+                dropIndicator = document.createElement('div');
+                dropIndicator.className = 'drop-indicator';
+            }
+            return dropIndicator;
+        }
+
+        function removeDropIndicator() {
+            if (dropIndicator && dropIndicator.parentNode) {
+                dropIndicator.parentNode.removeChild(dropIndicator);
+            }
+        }
+
+        // The card the dragged one should land in front of, decided by the pointer
+        // height against each card's midpoint. null means "below every card",
+        // i.e. drop at the bottom of the column.
+        function getCardAfterPointer(container, y) {
+            const siblings = [...container.querySelectorAll('.card:not(.dragging)')];
+            return siblings.find(card => {
+                const box = card.getBoundingClientRect();
+                return y < box.top + box.height / 2;
+            }) || null;
+        }
+
         function handleDragStart(e) {
             draggedCard = this;
             this.classList.add('dragging');
@@ -1707,6 +1744,10 @@
 
         function handleDragEnd(e) {
             this.classList.remove('dragging');
+            removeDropIndicator();
+            document.querySelectorAll('.column.drag-over').forEach(column => {
+                column.classList.remove('drag-over');
+            });
             draggedCard = null;
         }
 
@@ -1721,6 +1762,18 @@
         function handleDragOver(e) {
             e.preventDefault();
             e.dataTransfer.dropEffect = 'move';
+
+            if (!draggedCard) return;
+
+            const container = this.querySelector('.cards-container');
+            const afterCard = getCardAfterPointer(container, e.clientY);
+            const indicator = getDropIndicator();
+
+            if (afterCard) {
+                container.insertBefore(indicator, afterCard);
+            } else {
+                container.appendChild(indicator);
+            }
         }
 
         function handleDragEnter(e) {
@@ -1731,6 +1784,7 @@
         function handleDragLeave(e) {
             if (!this.contains(e.relatedTarget)) {
                 this.classList.remove('drag-over');
+                removeDropIndicator();
             }
         }
 
@@ -1742,15 +1796,37 @@
 
             const newColumn = this.dataset.column;
             const cardId = draggedCard.dataset.cardId;
+            const container = this.querySelector('.cards-container');
+            const afterCard = getCardAfterPointer(container, e.clientY);
+            const afterCardId = afterCard ? afterCard.dataset.cardId : null;
 
-            // Update card column
+            removeDropIndicator();
+
             const cardIndex = cards.findIndex(card => card.id === cardId);
-            if (cardIndex !== -1) {
-                cards[cardIndex].column = newColumn;
-                cards[cardIndex].updatedAt = new Date().toISOString();
-                saveCards();
-                renderCards();
+            if (cardIndex === -1) return;
+
+            const [movedCard] = cards.splice(cardIndex, 1);
+            movedCard.column = newColumn;
+            movedCard.updatedAt = new Date().toISOString();
+
+            // Card order on the board is the order of the cards array, so the drop
+            // position becomes an index: right before the card the pointer landed
+            // above, or after the column's last card when it landed below them all.
+            let insertAt;
+            if (afterCardId) {
+                insertAt = cards.findIndex(card => card.id === afterCardId);
+            } else {
+                insertAt = -1;
+                cards.forEach((card, index) => {
+                    if (card.column === newColumn && !card.completed) insertAt = index + 1;
+                });
             }
+            if (insertAt === -1) insertAt = cards.length;
+
+            cards.splice(insertAt, 0, movedCard);
+
+            saveCards();
+            renderCards();
         }
 
         // Close modal when clicking outside
